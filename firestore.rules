@@ -1,0 +1,34 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    match /users/{userId} {
+      // Lectura: propio documento, perfiles de abogados (búsqueda pública), o cualquier usuario autenticado (para mostrar nombres en citas)
+      allow read: if isOwner(userId) || (resource.data.role == 'abogado') || isAuthenticated();
+      allow create: if isOwner(userId);
+      allow update, delete: if isOwner(userId);
+    }
+
+    match /appointments/{appointmentId} {
+      allow read: if isAuthenticated() &&
+        (resource.data.clientId == request.auth.uid || resource.data.lawyerId == request.auth.uid);
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated() &&
+        (resource.data.clientId == request.auth.uid || resource.data.lawyerId == request.auth.uid);
+    }
+
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if isAuthenticated() && request.resource.data.authorId == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.authorId == request.auth.uid;
+    }
+  }
+}
