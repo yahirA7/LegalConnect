@@ -3,7 +3,6 @@ import {
   doc,
   getDoc,
   getDocs,
-  setDoc,
   updateDoc,
   addDoc,
   query,
@@ -20,9 +19,7 @@ function requireDb() {
 import { sanitizeText } from "./sanitize";
 import type {
   LawyerProfile,
-  AvailabilitySlot,
   Appointment,
-  Review,
   Specialty,
 } from "./types";
 import { SPECIALTIES } from "./types";
@@ -213,7 +210,7 @@ async function updateLawyerRating(lawyerId: string) {
   const reviews = await getReviewsByLawyer(lawyerId);
   const count = reviews.length;
   const avg = count > 0
-    ? reviews.reduce((sum, r) => sum + (r.rating as number), 0) / count
+    ? reviews.reduce((sum, r) => sum + ((r as { rating?: number }).rating ?? 0), 0) / count
     : 0;
   const userRef = doc(db, USERS, lawyerId);
   await updateDoc(userRef, {
@@ -259,10 +256,11 @@ export async function getReviewsByLawyer(lawyerId: string) {
 
 export async function getDisplayNames(uids: string[]): Promise<Record<string, string>> {
   if (!db || uids.length === 0) return {};
+  const firestore = db;
   const unique = [...new Set(uids)];
   const results = await Promise.all(
     unique.map(async (uid) => {
-      const ref = doc(db, USERS, uid);
+      const ref = doc(firestore, USERS, uid);
       const snap = await getDoc(ref);
       return [uid, snap.exists() ? (snap.data().displayName as string) ?? "Usuario" : "Usuario"];
     })

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { Scale } from "lucide-react";
 import { LoginForm } from "@/components/forms/LoginForm";
@@ -9,7 +10,9 @@ export default function LoginPage() {
         <Scale className="h-5 w-5" />
         LegalConnect
       </Link>
-      <LoginForm />
+      <Suspense fallback={<div className="text-muted-foreground">Cargando...</div>}>
+        <LoginForm />
+      </Suspense>
     </div>
   );
 }

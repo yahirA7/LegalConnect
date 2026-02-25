@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Scale, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { AppointmentList } from "@/components/appointments/AppointmentList";
 import { MainNav } from "@/components/nav/MainNav";

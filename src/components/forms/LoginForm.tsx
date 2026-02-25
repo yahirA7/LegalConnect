@@ -40,6 +40,7 @@ export function LoginForm() {
 
     try {
       const { user } = await signIn(formData.email, formData.password);
+      if (!db) throw new Error("Firebase no configurado");
       const profileSnap = await getDoc(doc(db, "users", user.uid));
       const role = profileSnap.data()?.role as "abogado" | "cliente" | undefined;
 

@@ -31,7 +31,7 @@ const STATUS_LABELS: Record<string, string> = {
 
 function fetchData(uid: string, asClient: boolean) {
   return getAppointmentsByUser(uid, asClient).then(async (data) => {
-    const apts = data as Appointment[];
+    const apts = data as unknown as Appointment[];
     const ids = apts.map((a) => (asClient ? a.lawyerId : a.clientId));
     const nameMap = await getDisplayNames(ids);
     return { apts, nameMap };

@@ -39,6 +39,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
+    const firestore = db;
+
     const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
 
@@ -49,7 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       const unsubscribeProfile = onSnapshot(
-        doc(db, "users", firebaseUser.uid),
+        doc(firestore, "users", firebaseUser.uid),
         (snapshot) => {
           if (snapshot.exists()) {
             setProfile(snapshot.data() as UserProfile);
