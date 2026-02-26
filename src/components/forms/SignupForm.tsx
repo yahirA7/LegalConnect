@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { User, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,11 +14,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { signUp, setAuthSession } from "@/lib/auth";
+import { signUp } from "@/lib/auth";
 import type { UserRole } from "@/lib/types";
 
+function getSignupErrorMessage(err: unknown): string {
+  const msg = err instanceof Error ? err.message : String(err);
+  if (msg.includes("auth/unauthorized-domain") || msg.includes("unauthorized domain")) {
+    return "Dominio no autorizado. Añade localhost en Firebase Console → Authentication → Authorized domains.";
+  }
+  if (msg.includes("auth/email-already-in-use")) return "Este correo ya está registrado.";
+  if (msg.includes("auth/weak-password")) return "La contraseña es demasiado débil.";
+  if (msg.includes("auth/invalid-email")) return "Correo electrónico no válido.";
+  if (msg.includes("Firebase") || msg.includes("permission")) {
+    return "Error de Firebase. Comprueba que localhost esté en Authorized domains.";
+  }
+  return msg || "Error al crear la cuenta.";
+}
+
 export function SignupForm() {
-  const router = useRouter();
   const [role, setRole] = useState<UserRole | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,13 +74,25 @@ export function SignupForm() {
         formData.displayName,
         role
       );
-      await setAuthSession(user.uid, role);
-      const redirect = role === "abogado" ? "/abogado/perfil" : "/cliente/dashboard";
-      router.push(redirect);
-      router.refresh();
+      const redirectUrl = role === "abogado" ? "/abogado/perfil" : "/cliente/dashboard";
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = "/api/auth/session";
+      [
+        ["uid", user.uid],
+        ["role", role],
+        ["redirect", redirectUrl],
+      ].forEach(([name, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+      });
+      document.body.appendChild(form);
+      form.submit();
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Error al crear la cuenta";
-      setError(message);
+      setError(getSignupErrorMessage(err));
     } finally {
       setLoading(false);
     }

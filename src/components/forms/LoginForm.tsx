@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,12 +14,28 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { signIn, setAuthSession, resetPassword } from "@/lib/auth";
+import { signIn, resetPassword } from "@/lib/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
+function getLoginErrorMessage(err: unknown): string {
+  const msg = err instanceof Error ? err.message : String(err);
+  if (msg.includes("auth/unauthorized-domain") || msg.includes("unauthorized domain")) {
+    return "Dominio no autorizado. Añade localhost en Firebase Console → Authentication → Authorized domains.";
+  }
+  if (msg.includes("auth/invalid-credential") || msg.includes("auth/wrong-password")) {
+    return "Correo o contraseña incorrectos.";
+  }
+  if (msg.includes("auth/too-many-requests")) {
+    return "Demasiados intentos. Espera unos minutos.";
+  }
+  if (msg.includes("Firebase") || msg.includes("permission")) {
+    return "Error de Firebase. Comprueba que localhost esté en Authorized domains y que las reglas de Firestore estén desplegadas.";
+  }
+  return msg || "Error al iniciar sesión.";
+}
+
 export function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") ?? "/";
   const [loading, setLoading] = useState(false);
@@ -40,23 +56,43 @@ export function LoginForm() {
 
     try {
       const { user } = await signIn(formData.email, formData.password);
-      if (!db) throw new Error("Firebase no configurado");
-      const profileSnap = await getDoc(doc(db, "users", user.uid));
-      const role = profileSnap.data()?.role as "abogado" | "cliente" | undefined;
+      if (!db) throw new Error("Firebase no configurado. Revisa .env.local");
 
-      await setAuthSession(user.uid, role ?? "cliente");
+      let userRole: "abogado" | "cliente" = "cliente";
+      try {
+        const profileSnap = await getDoc(doc(db, "users", user.uid));
+        const role = profileSnap.data()?.role as "abogado" | "cliente" | undefined;
+        if (role === "abogado" || role === "cliente") userRole = role;
+      } catch {
+        // Si Firestore falla (permisos, etc.), continuar con rol cliente
+      }
 
       const destination =
         redirect && redirect !== "/"
           ? redirect
-          : role === "abogado"
+          : userRole === "abogado"
             ? "/abogado/dashboard"
             : "/cliente/dashboard";
 
-      router.push(destination);
-      router.refresh();
+      // Form POST + redirect 302: las cookies se establecen en la misma respuesta
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = "/api/auth/session";
+      [
+        ["uid", user.uid],
+        ["role", userRole],
+        ["redirect", destination],
+      ].forEach(([name, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+      });
+      document.body.appendChild(form);
+      form.submit();
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Error al iniciar sesión";
+      const message = getLoginErrorMessage(err);
       setError(message);
     } finally {
       setLoading(false);

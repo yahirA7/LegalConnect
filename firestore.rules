@@ -11,8 +11,12 @@ service cloud.firestore {
     }
 
     match /users/{userId} {
-      // Lectura: propio documento, perfiles de abogados (búsqueda pública), o cualquier usuario autenticado (para mostrar nombres en citas)
-      allow read: if isOwner(userId) || (resource.data.role == 'abogado') || isAuthenticated();
+      // Lectura: propio documento, perfiles de abogados (búsqueda) y clientes (para mostrar nombres en citas)
+      // resource != null evita error cuando el documento no existe aún (login)
+      allow read: if isAuthenticated() && (
+        request.auth.uid == userId ||
+        (resource != null && (resource.data.role == 'abogado' || resource.data.role == 'cliente'))
+      );
       allow create: if isOwner(userId);
       allow update, delete: if isOwner(userId);
     }
@@ -23,6 +27,12 @@ service cloud.firestore {
       allow create: if isAuthenticated();
       allow update, delete: if isAuthenticated() &&
         (resource.data.clientId == request.auth.uid || resource.data.lawyerId == request.auth.uid);
+    }
+
+    match /booked_slots/{slotId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow delete: if isAuthenticated();
     }
 
     match /reviews/{reviewId} {

@@ -61,7 +61,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setLoading(false);
         },
         (error) => {
-          console.error("Error fetching user profile:", error);
+          console.warn("Error fetching user profile (Firestore):", error?.message ?? error);
           setProfile(null);
           setLoading(false);
         }

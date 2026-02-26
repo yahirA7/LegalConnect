@@ -34,8 +34,11 @@ src/
    - `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`
    - `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`
    - `NEXT_PUBLIC_FIREBASE_APP_ID`
-4. Añade `SESSION_SECRET` en `.env.local` (genera uno con `openssl rand -base64 32`)
-5. Despliega las reglas de Firestore: `firebase deploy --only firestore:rules`
+4. Añade `SESSION_SECRET` en `.env.local` (genera uno con `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`)
+5. Despliega las reglas de Firestore: `npm run firebase:deploy-rules`
+6. **Para localhost**: Firebase Console → Authentication → Settings → Authorized domains → añade `localhost`
+
+Verifica la configuración con: `npm run setup`
 
 Sin credenciales válidas, la app cargará pero mostrará un aviso y las funciones de auth no funcionarán.
 

@@ -5,10 +5,12 @@ import {
   getDocs,
   updateDoc,
   addDoc,
+  deleteDoc,
   query,
   where,
   orderBy,
   limit,
+  runTransaction,
   type DocumentData,
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
@@ -26,6 +28,7 @@ import { SPECIALTIES } from "./types";
 
 const USERS = "users";
 const APPOINTMENTS = "appointments";
+const BOOKED_SLOTS = "booked_slots";
 const REVIEWS = "reviews";
 
 export async function updateLawyerProfile(
@@ -97,24 +100,17 @@ export async function searchLawyers(filters: {
   return lawyers;
 }
 
+/** Comprueba si un horario está ocupado usando booked_slots (sin exponer datos de otras citas). */
 export async function isSlotOccupied(
   lawyerId: string,
   date: string,
   time: string
 ): Promise<boolean> {
   if (!db) return false;
-  const q = query(
-    collection(db, APPOINTMENTS),
-    where("lawyerId", "==", lawyerId),
-    where("date", "==", date),
-    where("time", "==", time),
-    limit(1)
-  );
-  const snapshot = await getDocs(q);
-  const docs = snapshot.docs.filter(
-    (d) => !["cancelada"].includes(d.data().status as string)
-  );
-  return docs.length > 0;
+  const slotId = `${lawyerId}_${date}_${time}`;
+  const slotRef = doc(db, BOOKED_SLOTS, slotId);
+  const snap = await getDoc(slotRef);
+  return snap.exists();
 }
 
 export async function createAppointment(
@@ -125,12 +121,12 @@ export async function createAppointment(
 ) {
   requireDb();
   if (!auth?.currentUser) throw new Error("Debes iniciar sesión para reservar");
-  const occupied = await isSlotOccupied(lawyerId, date, time);
-  if (occupied) throw new Error("Este horario ya no está disponible. Elige otra fecha u hora.");
   const clientId = auth.currentUser.uid;
-  const ref = collection(db!, APPOINTMENTS);
+  const slotId = `${lawyerId}_${date}_${time}`;
+  const slotRef = doc(db!, BOOKED_SLOTS, slotId);
+  const aptRef = doc(collection(db!, APPOINTMENTS));
   const now = new Date().toISOString();
-  const docRef = await addDoc(ref, {
+  const aptData = {
     clientId,
     lawyerId,
     status: "pendiente",
@@ -139,8 +135,16 @@ export async function createAppointment(
     notes: notes ? sanitizeText(notes, 500) : null,
     createdAt: now,
     updatedAt: now,
+  };
+  await runTransaction(db!, async (tx) => {
+    const slotSnap = await tx.get(slotRef);
+    if (slotSnap.exists()) {
+      throw new Error("Este horario ya no está disponible. Elige otra fecha u hora.");
+    }
+    tx.set(slotRef, { lawyerId, date, time, createdAt: now });
+    tx.set(aptRef, aptData);
   });
-  return docRef.id;
+  return aptRef.id;
 }
 
 export async function getAppointmentsByUser(uid: string, asClient: boolean) {
@@ -199,6 +203,13 @@ export async function updateAppointmentStatus(
 ) {
   requireDb();
   const ref = doc(db!, APPOINTMENTS, appointmentId);
+  const snap = await getDoc(ref);
+  if (snap.exists() && status === "cancelada") {
+    const d = snap.data();
+    const slotId = `${d.lawyerId}_${d.date}_${d.time}`;
+    const slotRef = doc(db!, BOOKED_SLOTS, slotId);
+    await deleteDoc(slotRef);
+  }
   await updateDoc(ref, {
     status,
     updatedAt: new Date().toISOString(),

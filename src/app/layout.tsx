@@ -3,6 +3,7 @@ import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { FirebaseConfigBanner } from "@/components/FirebaseConfigBanner";
+import { DevBanner } from "@/components/DevBanner";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-background font-sans antialiased">
         <AuthProvider>
           <FirebaseConfigBanner />
+          <DevBanner />
           {children}
         </AuthProvider>
       </body>

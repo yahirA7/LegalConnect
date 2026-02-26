@@ -67,6 +67,25 @@ Citas entre clientes y abogados.
 
 ---
 
+## Colección: `booked_slots`
+
+Controla la disponibilidad de horarios sin exponer datos de otras citas. Usada para que los clientes puedan comprobar disponibilidad al reservar.
+
+```typescript
+// Document ID: {lawyerId}_{date}_{time}
+{
+  lawyerId: string;
+  date: string;   // "2025-02-24"
+  time: string;  // "10:00"
+  createdAt: string;
+}
+```
+
+**Reglas de seguridad:**
+- Lectura/creación/eliminación: cualquier usuario autenticado
+
+---
+
 ## Colección: `reviews`
 
 Reseñas de clientes sobre abogados.
