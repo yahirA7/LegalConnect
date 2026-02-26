@@ -16,9 +16,9 @@ export async function POST(request: NextRequest) {
       redirect = body.redirect;
     } else {
       const formData = await request.formData();
-      uid = formData.get("uid") as string | null;
-      role = formData.get("role") as UserRole | null;
-      redirect = formData.get("redirect") as string | null;
+      uid = (formData.get("uid") as string | null) ?? undefined;
+      role = (formData.get("role") as UserRole | null) ?? undefined;
+      redirect = (formData.get("redirect") as string | null) ?? undefined;
     }
 
     if (!uid || !role || !["abogado", "cliente"].includes(role as string)) {

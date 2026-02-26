@@ -1,4 +1,36 @@
-# Por qué falla en localhost
+# Solución de problemas - LegalConnect
+
+## "Missing or insufficient permissions" en Vercel
+
+Si funciona en localhost pero **falla en Vercel**, casi siempre es por uno de estos motivos:
+
+### 1. Dominio de Vercel no autorizado en Firebase (causa más común)
+
+Firebase Auth solo permite dominios en su lista. Si tu URL de Vercel no está, `request.auth` será `null` y Firestore rechazará las operaciones.
+
+**Solución:**
+1. Ve a [Firebase Console](https://console.firebase.google.com) → proyecto **legalconnect-4e027**
+2. **Authentication** → **Settings** (engranaje) → **Authorized domains**
+3. Haz clic en **Add domain**
+4. Añade tu dominio de Vercel, por ejemplo:
+   - `legalconnect.vercel.app` (o el nombre de tu proyecto)
+   - `tu-proyecto-xxx.vercel.app`
+   - Si usas dominio propio: `tudominio.com`
+
+### 2. Variables de entorno en Vercel
+
+Las variables de `.env.local` **no se suben a GitHub**. Debes configurarlas en Vercel:
+
+1. Ve a [Vercel Dashboard](https://vercel.com) → tu proyecto → **Settings** → **Environment Variables**
+2. Añade todas las variables de Firebase (las que empiezan con `NEXT_PUBLIC_FIREBASE_`)
+3. Añade `SESSION_SECRET` si usas sesiones
+4. **Redeploy** el proyecto después de añadir variables
+
+### 3. Redeploy tras cambios
+
+Si añadiste dominios o variables, haz un **Redeploy** en Vercel (Deployments → ⋮ → Redeploy).
+
+---
 
 ## Diferencias entre localhost y Vercel (producción)
 
@@ -61,6 +93,12 @@ Cookies o caché antiguos pueden provocar comportamientos raros.
 
 ## Checklist rápido
 
+**Para Vercel (producción):**
+- [ ] Dominio de Vercel en Firebase → Authentication → Authorized domains
+- [ ] Variables de entorno configuradas en Vercel Dashboard
+- [ ] Redeploy tras añadir dominio o variables
+
+**Para localhost:**
 - [ ] `localhost` en Firebase → Authorized domains
 - [ ] `.env.local` con todas las variables
 - [ ] Servidor reiniciado tras cambiar `.env.local`
