@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
-import { MapPin, Star, DollarSign, User } from "lucide-react";
+import { MapPin, Star, DollarSign } from "lucide-react";
+import { ProfileAvatar } from "@/components/ui/ProfileAvatar";
 import { formatPricePerHour } from "@/lib/format";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,20 +35,7 @@ export function LawyerCard({
       <CardContent className="p-6 md:p-8">
         <div className="flex flex-col sm:flex-row sm:items-start gap-6">
           <div className="flex sm:items-center gap-4 sm:gap-5 flex-1 min-w-0">
-            <div className="w-14 h-14 rounded-full overflow-hidden bg-muted border border-border shrink-0 flex items-center justify-center">
-              {photoURL ? (
-                <Image
-                  src={photoURL}
-                  alt={displayName}
-                  width={56}
-                  height={56}
-                  className="object-cover w-full h-full"
-                  unoptimized
-                />
-              ) : (
-                <User className="h-7 w-7 text-muted-foreground" strokeWidth={1.5} />
-              )}
-            </div>
+            <ProfileAvatar src={photoURL} alt={displayName} size="md" />
             <div className="flex-1 min-w-0">
             <h3 className="font-display font-semibold text-xl text-foreground group-hover:text-primary transition-colors duration-250">
               {displayName}

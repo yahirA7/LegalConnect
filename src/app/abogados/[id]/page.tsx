@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { MapPin, DollarSign, ArrowLeft, User } from "lucide-react";
+import { MapPin, DollarSign, ArrowLeft } from "lucide-react";
+import { ProfileAvatar } from "@/components/ui/ProfileAvatar";
 import { formatPricePerHour } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 import {
@@ -98,20 +98,12 @@ export default function LawyerPublicProfilePage() {
             Volver a buscar
           </Link>
           <div className="mb-10 flex flex-col sm:flex-row sm:items-center gap-6">
-            <div className="w-20 h-20 rounded-full overflow-hidden bg-muted border-2 border-border shrink-0 flex items-center justify-center">
-              {lawyer.photoURL ? (
-                <Image
-                  src={lawyer.photoURL}
-                  alt={lawyer.displayName}
-                  width={80}
-                  height={80}
-                  className="object-cover w-full h-full"
-                  unoptimized
-                />
-              ) : (
-                <User className="h-10 w-10 text-muted-foreground" strokeWidth={1.5} />
-              )}
-            </div>
+            <ProfileAvatar
+              src={lawyer.photoURL}
+              alt={lawyer.displayName}
+              size="lg"
+              className="border-2"
+            />
             <div>
             <h1 className="font-display text-2xl md:text-3xl font-semibold text-foreground">{lawyer.displayName}</h1>
             <p className="text-primary font-medium capitalize mt-1">{lawyer.specialty}</p>

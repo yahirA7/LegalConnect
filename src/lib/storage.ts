@@ -36,3 +36,14 @@ export async function uploadProfilePhoto(uid: string, file: File): Promise<strin
 
   return getDownloadURL(storageRef);
 }
+
+/**
+ * Convierte una URL de Firebase Storage a la ruta del proxy de imágenes.
+ * Incluye URLs de producción y emulador.
+ */
+export function getProxiedImageUrl(url: string | null | undefined): string | null {
+  if (!url || typeof url !== "string") return null;
+  const isFirebase = url.includes("firebasestorage.googleapis.com") || url.includes("127.0.0.1:9199");
+  if (!isFirebase) return null;
+  return `/api/image?url=${encodeURIComponent(url)}`;
+}

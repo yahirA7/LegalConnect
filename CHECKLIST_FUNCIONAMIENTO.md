@@ -38,6 +38,28 @@ O en Firebase Console → **Firestore** → **Rules** → **Publish**
 
 ---
 
+## 3b. Storage: habilitado y reglas desplegadas (fotos de perfil)
+
+Si las fotos de perfil no se muestran o quedan cargando:
+
+1. **Habilita Storage** en Firebase Console → **Storage** → **Get started** (si no lo has hecho)
+2. **Despliega las reglas**:
+
+**Pasos:**
+```powershell
+firebase deploy --only storage
+```
+
+O en Firebase Console → **Storage** → **Rules** → **Publish**
+
+**Opcional - CORS** (si las imágenes siguen sin cargar): configura CORS en tu bucket:
+```powershell
+gsutil cors set storage.cors.json gs://TU-PROYECTO.appspot.com
+```
+(Reemplaza TU-PROYECTO con el ID de tu proyecto Firebase)
+
+---
+
 ## 4. Navegador: caché limpia
 
 Cookies o caché antiguos pueden dar problemas.
@@ -66,4 +88,5 @@ Si hay varios `npm run dev` abiertos, pueden chocar.
 | Pantalla en blanco | Usa la URL que muestra la terminal (3000 o 3001) |
 | Login/registro no funciona | Añade `localhost` en Firebase → Authorized domains |
 | "Missing permissions" | Despliega reglas: `firebase deploy --only firestore:rules` |
+| Fotos de perfil no cargan | Despliega Storage: `firebase deploy --only storage` |
 | Comportamiento raro | Limpia caché o usa incógnito |

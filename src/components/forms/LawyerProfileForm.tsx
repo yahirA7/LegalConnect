@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Camera, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import { ProfileAvatar } from "@/components/ui/ProfileAvatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -48,6 +48,7 @@ export function LawyerProfileForm() {
     country: "",
     availability: [] as AvailabilitySlot[],
   });
+  const [localPreviewUrl, setLocalPreviewUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -74,13 +75,22 @@ export function LawyerProfileForm() {
     if (!file || !user) return;
     e.target.value = "";
     setPhotoError(null);
+
+    // Vista previa inmediata con object URL (se ve al instante)
+    const objectUrl = URL.createObjectURL(file);
+    setLocalPreviewUrl(objectUrl);
+
     setUploadingPhoto(true);
     try {
       const url = await uploadProfilePhoto(user.uid, file);
       await updateLawyerProfile(user.uid, { photoURL: url });
       setFormData((p) => ({ ...p, photoURL: url }));
+      URL.revokeObjectURL(objectUrl);
+      setLocalPreviewUrl(null);
     } catch (err) {
       setPhotoError(err instanceof Error ? err.message : "Error al subir la foto");
+      URL.revokeObjectURL(objectUrl);
+      setLocalPreviewUrl(null);
     } finally {
       setUploadingPhoto(false);
     }
@@ -155,20 +165,13 @@ export function LawyerProfileForm() {
         </CardHeader>
         <CardContent className="flex flex-col sm:flex-row items-start gap-6">
           <div className="relative group">
-            <div className="w-24 h-24 rounded-full overflow-hidden bg-muted border-2 border-border flex items-center justify-center shrink-0">
-              {formData.photoURL ? (
-                <Image
-                  src={formData.photoURL}
-                  alt="Foto de perfil"
-                  width={96}
-                  height={96}
-                  className="object-cover w-full h-full"
-                  unoptimized
-                />
-              ) : (
-                <Camera className="h-10 w-10 text-muted-foreground" strokeWidth={1.5} />
-              )}
-            </div>
+            <ProfileAvatar
+              src={localPreviewUrl ?? formData.photoURL}
+              alt="Foto de perfil"
+              size="xl"
+              placeholder="camera"
+              className="border-2"
+            />
             {uploadingPhoto && (
               <div className="absolute inset-0 rounded-full bg-background/80 flex items-center justify-center">
                 <Loader2 className="h-8 w-8 text-primary animate-spin" strokeWidth={2} />
