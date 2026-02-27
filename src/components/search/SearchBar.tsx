@@ -26,27 +26,30 @@ export function SearchBar({
   onSearch,
 }: SearchBarProps) {
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col sm:flex-row gap-3">
+    <div className="p-6 md:p-8 rounded-2xl bg-card/80 border border-border/50 shadow-card space-y-6">
+      <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
           <Input
             placeholder="Nombre, especialidad, ubicación..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && onSearch()}
-            className="pl-10"
+            className="pl-11 h-12"
           />
         </div>
-        <Button onClick={onSearch}>Buscar</Button>
+        <Button onClick={onSearch} size="lg" className="min-w-[140px]">
+          <Search className="h-4 w-4" strokeWidth={1.5} />
+          Buscar
+        </Button>
       </div>
-      <div className="flex flex-wrap gap-4 items-center">
-        <div className="flex items-center gap-2">
-          <label className="text-sm text-muted-foreground">Especialidad</label>
+      <div className="flex flex-wrap gap-6 items-center pt-2">
+        <div className="flex items-center gap-3">
+          <label className="text-sm font-medium text-foreground/90">Especialidad</label>
           <select
             value={specialty}
             onChange={(e) => onSpecialtyChange(e.target.value)}
-            className="h-9 rounded-md border border-input bg-background px-3 text-sm"
+            className="h-10 rounded-xl border border-border/80 bg-background/80 px-4 text-sm transition-all duration-250 focus:outline-none focus:ring-2 focus:ring-ring/40 focus:ring-offset-2 hover:border-border"
           >
             <option value="">Todas</option>
             {SPECIALTIES.map((s) => (
@@ -56,12 +59,12 @@ export function SearchBar({
             ))}
           </select>
         </div>
-        <div className="flex items-center gap-2">
-          <label className="text-sm text-muted-foreground">Rating mínimo</label>
+        <div className="flex items-center gap-3">
+          <label className="text-sm font-medium text-foreground/90">Rating mínimo</label>
           <select
             value={minRating}
             onChange={(e) => onMinRatingChange(Number(e.target.value))}
-            className="h-9 rounded-md border border-input bg-background px-3 text-sm"
+            className="h-10 rounded-xl border border-border/80 bg-background/80 px-4 text-sm transition-all duration-250 focus:outline-none focus:ring-2 focus:ring-ring/40 focus:ring-offset-2 hover:border-border"
           >
             <option value={0}>Cualquiera</option>
             <option value={4}>4+ estrellas</option>

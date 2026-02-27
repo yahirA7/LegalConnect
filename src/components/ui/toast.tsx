@@ -31,11 +31,12 @@ export function Toast({
     <div
       role="alert"
       className={cn(
-        "fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-3 rounded-lg bg-primary text-primary-foreground shadow-lg",
+        "fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-5 py-3.5 rounded-xl bg-primary text-primary-foreground shadow-elevated border border-primary/10",
+        "animate-fade-in-up",
         className
       )}
     >
-      <Check className="h-4 w-4 shrink-0" />
+      <Check className="h-4 w-4 shrink-0" strokeWidth={2} />
       <span className="text-sm font-medium">{message}</span>
     </div>
   );

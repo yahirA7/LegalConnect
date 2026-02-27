@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { MapPin, DollarSign, ArrowLeft } from "lucide-react";
+import { MapPin, DollarSign, ArrowLeft, User } from "lucide-react";
 import { formatPricePerHour } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 import {
@@ -54,19 +55,28 @@ export default function LawyerPublicProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-muted-foreground">Cargando...</p>
+      <div className="min-h-screen flex flex-col bg-background">
+        <MainNav />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="flex items-center gap-3 text-muted-foreground">
+            <div className="h-5 w-5 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
+            <span>Cargando...</span>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (!lawyer) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-        <p className="text-muted-foreground">Abogado no encontrado</p>
-        <Link href="/buscar">
-          <Button>Volver a buscar</Button>
-        </Link>
+      <div className="min-h-screen flex flex-col bg-background">
+        <MainNav />
+        <div className="flex-1 flex flex-col items-center justify-center gap-6">
+          <p className="text-muted-foreground">Abogado no encontrado</p>
+          <Link href="/buscar">
+            <Button size="lg">Volver a buscar</Button>
+          </Link>
+        </div>
       </div>
     );
   }
@@ -78,17 +88,32 @@ export default function LawyerPublicProfilePage() {
     : lawyer.rating;
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background">
       <MainNav />
 
-      <main className="flex-1 container mx-auto px-4 py-8">
+      <main className="flex-1 container mx-auto px-4 py-12 md:py-16">
         <div className="max-w-4xl mx-auto">
-          <Link href="/buscar" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
-            <ArrowLeft className="h-4 w-4" />
+          <Link href="/buscar" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors">
+            <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
             Volver a buscar
           </Link>
-          <div className="mb-8">
-            <h1 className="font-display text-2xl font-semibold">{lawyer.displayName}</h1>
+          <div className="mb-10 flex flex-col sm:flex-row sm:items-center gap-6">
+            <div className="w-20 h-20 rounded-full overflow-hidden bg-muted border-2 border-border shrink-0 flex items-center justify-center">
+              {lawyer.photoURL ? (
+                <Image
+                  src={lawyer.photoURL}
+                  alt={lawyer.displayName}
+                  width={80}
+                  height={80}
+                  className="object-cover w-full h-full"
+                  unoptimized
+                />
+              ) : (
+                <User className="h-10 w-10 text-muted-foreground" strokeWidth={1.5} />
+              )}
+            </div>
+            <div>
+            <h1 className="font-display text-2xl md:text-3xl font-semibold text-foreground">{lawyer.displayName}</h1>
             <p className="text-primary font-medium capitalize mt-1">{lawyer.specialty}</p>
             <div className="flex flex-wrap gap-4 mt-3 text-sm text-muted-foreground">
               {(displayRating != null && displayRating > 0) && (
@@ -113,6 +138,7 @@ export default function LawyerPublicProfilePage() {
                   {lawyer.city && `, ${lawyer.city}`}
                 </span>
               )}
+            </div>
             </div>
           </div>
 

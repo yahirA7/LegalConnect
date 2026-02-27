@@ -2,44 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Paleta de Lujo Moderno - LegalConnect */
+/* Carbón #1a1a1a | Crema #faf8f5 | Azul Medianoche #0f172a | Acento Dorado #b8860b */
+
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 222 47% 11%;
+    /* Fondos y superficies - crema cálido con sutileza */
+    --background: 40 33% 98%;
+    --foreground: 220 20% 12%;
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
-    --primary: 222 47% 18%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222 47% 11%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222 47% 11%;
+    --card-foreground: 220 20% 12%;
+    /* Azul medianoche - autoridad y profundidad */
+    --primary: 222 47% 11%;
+    --primary-foreground: 40 33% 98%;
+    /* Secundario - crema suave */
+    --secondary: 40 25% 96%;
+    --secondary-foreground: 220 20% 12%;
+    /* Muted - fondos sutiles */
+    --muted: 40 20% 94%;
+    --muted-foreground: 220 12% 42%;
+    /* Acento premium - dorado oscuro */
+    --accent: 43 74% 38%;
+    --accent-foreground: 40 33% 98%;
+    --accent-emerald: 165 86% 16%;
     --destructive: 0 84% 60%;
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 222 47% 18%;
-    --radius: 0.5rem;
+    /* Bordes con degradado sutil */
+    --border: 40 15% 90%;
+    --input: 40 15% 92%;
+    --ring: 222 47% 11%;
+    --radius: 0.75rem;
+    /* Sombras premium */
+    --shadow-soft: 0 4px 24px -4px rgb(15 23 42 / 0.06), 0 8px 48px -8px rgb(15 23 42 / 0.04);
+    --shadow-elevated: 0 12px 40px -8px rgb(15 23 42 / 0.08), 0 24px 64px -16px rgb(15 23 42 / 0.06);
+    --shadow-glow: 0 0 40px -8px rgb(184 134 11 / 0.15);
+    /* Glassmorphism */
+    --glass-bg: rgba(255 255 255 / 0.72);
+    --glass-border: rgba(255 255 255 / 0.5);
   }
 
   .dark {
     --background: 222 47% 6%;
-    --foreground: 210 40% 98%;
+    --foreground: 40 20% 96%;
     --card: 222 47% 8%;
-    --card-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222 47% 18%;
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 217 33% 17%;
-    --accent-foreground: 210 40% 98%;
+    --card-foreground: 40 20% 96%;
+    --primary: 43 74% 48%;
+    --primary-foreground: 222 47% 6%;
+    --secondary: 222 30% 12%;
+    --secondary-foreground: 40 20% 96%;
+    --muted: 222 30% 12%;
+    --muted-foreground: 220 10% 60%;
+    --accent: 43 74% 48%;
+    --accent-foreground: 222 47% 6%;
     --destructive: 0 62% 50%;
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 212 100% 50%;
+    --border: 222 25% 16%;
+    --input: 222 25% 14%;
+    --ring: 43 74% 48%;
+    --shadow-soft: 0 4px 24px -4px rgb(0 0 0 / 0.2);
+    --shadow-elevated: 0 12px 40px -8px rgb(0 0 0 / 0.3);
+    --glass-bg: rgba(15 23 42 / 0.6);
+    --glass-border: rgba(255 255 255 / 0.08);
   }
 }
 
@@ -48,6 +69,51 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+    letter-spacing: 0.01em;
   }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-semibold tracking-tight;
+  }
+}
+
+/* Utilidades premium */
+@layer utilities {
+  .section-spacing {
+    @apply py-20 md:py-32;
+  }
+  .card-spacing {
+    @apply p-8 md:p-10;
+  }
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+  }
+  .gradient-border {
+    position: relative;
+    background: linear-gradient(white, white) padding-box,
+      linear-gradient(135deg, rgba(15 23 42 / 0.08), rgba(184 134 11 / 0.12), rgba(15 23 42 / 0.06)) border-box;
+    border: 1px solid transparent;
+  }
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground/90 to-foreground/80;
+  }
+}
+
+/* Animaciones sutiles */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }

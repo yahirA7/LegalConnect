@@ -39,20 +39,23 @@ export function MainNav({ showSearch = true }: MainNavProps) {
       : [];
 
   return (
-    <header className="border-b bg-card">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 font-display font-semibold text-xl shrink-0">
-          <Scale className="h-6 w-6" />
+    <header className="sticky top-0 z-50 glass border-b border-border/40 shadow-soft">
+      <div className="container mx-auto px-4 h-16 md:h-[4.5rem] flex items-center justify-between">
+        <Link
+          href="/"
+          className="flex items-center gap-2.5 font-display font-semibold text-xl text-foreground shrink-0 transition-opacity hover:opacity-90"
+        >
+          <Scale className="h-6 w-6 text-primary" strokeWidth={1.5} />
           LegalConnect
         </Link>
 
-        <nav className="hidden md:flex items-center gap-2 lg:gap-4">
+        <nav className="hidden md:flex items-center gap-1 lg:gap-2">
           {showSearch && (
             <Link
               href="/buscar"
-              className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-all duration-250"
             >
-              <Search className="h-4 w-4" />
+              <Search className="h-4 w-4" strokeWidth={1.5} />
               Buscar
             </Link>
           )}
@@ -60,14 +63,19 @@ export function MainNav({ showSearch = true }: MainNavProps) {
             <>
               {navLinks.slice(1).map((link) => (
                 <Link key={link.href} href={link.href}>
-                  <Button variant="ghost" size="sm">
-                    <link.icon className="h-4 w-4" />
-                    <span className="ml-1">{link.label}</span>
+                  <Button variant="ghost" size="sm" className="gap-2">
+                    <link.icon className="h-4 w-4" strokeWidth={1.5} />
+                    {link.label}
                   </Button>
                 </Link>
               ))}
-              <Button variant="outline" size="sm" onClick={handleSignOut}>
-                <LogOut className="h-4 w-4 mr-1" />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleSignOut}
+                className="ml-2 gap-2"
+              >
+                <LogOut className="h-4 w-4" strokeWidth={1.5} />
                 Salir
               </Button>
             </>
@@ -96,7 +104,7 @@ export function MainNav({ showSearch = true }: MainNavProps) {
 
       <div
         className={cn(
-          "md:hidden border-t bg-card overflow-hidden transition-all duration-200",
+          "md:hidden border-t border-border/40 bg-card/95 backdrop-blur-xl overflow-hidden transition-all duration-300 ease-out",
           mobileOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
         )}
       >
@@ -105,9 +113,9 @@ export function MainNav({ showSearch = true }: MainNavProps) {
             <Link
               href="/buscar"
               onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-2 py-3 px-3 rounded-lg hover:bg-muted"
+              className="flex items-center gap-3 py-3.5 px-4 rounded-xl hover:bg-secondary/60 transition-all duration-250"
             >
-              <Search className="h-4 w-4" />
+              <Search className="h-4 w-4" strokeWidth={1.5} />
               Buscar abogados
             </Link>
           )}
@@ -118,17 +126,17 @@ export function MainNav({ showSearch = true }: MainNavProps) {
                   <Link
                     href="/abogado/dashboard"
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-2 py-3 px-3 rounded-lg hover:bg-muted"
+                    className="flex items-center gap-3 py-3.5 px-4 rounded-xl hover:bg-secondary/60 transition-all duration-250"
                   >
-                    <User className="h-4 w-4" />
+                    <User className="h-4 w-4" strokeWidth={1.5} />
                     Dashboard
                   </Link>
                   <Link
                     href="/abogado/citas"
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-2 py-3 px-3 rounded-lg hover:bg-muted"
+                    className="flex items-center gap-3 py-3.5 px-4 rounded-xl hover:bg-secondary/60 transition-all duration-250"
                   >
-                    <Calendar className="h-4 w-4" />
+                    <Calendar className="h-4 w-4" strokeWidth={1.5} />
                     Citas
                   </Link>
                 </>
@@ -137,26 +145,26 @@ export function MainNav({ showSearch = true }: MainNavProps) {
                   <Link
                     href="/cliente/dashboard"
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-2 py-3 px-3 rounded-lg hover:bg-muted"
+                    className="flex items-center gap-3 py-3.5 px-4 rounded-xl hover:bg-secondary/60 transition-all duration-250"
                   >
-                    <User className="h-4 w-4" />
+                    <User className="h-4 w-4" strokeWidth={1.5} />
                     Dashboard
                   </Link>
                   <Link
                     href="/cliente/citas"
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-2 py-3 px-3 rounded-lg hover:bg-muted"
+                    className="flex items-center gap-3 py-3.5 px-4 rounded-xl hover:bg-secondary/60 transition-all duration-250"
                   >
-                    <Calendar className="h-4 w-4" />
+                    <Calendar className="h-4 w-4" strokeWidth={1.5} />
                     Mis citas
                   </Link>
                 </>
               )}
               <button
                 onClick={handleSignOut}
-                className="flex items-center gap-2 py-3 px-3 rounded-lg hover:bg-muted text-left w-full"
+                className="flex items-center gap-3 py-3.5 px-4 rounded-xl hover:bg-secondary/60 transition-all duration-250 text-left w-full"
               >
-                <LogOut className="h-4 w-4" />
+                <LogOut className="h-4 w-4" strokeWidth={1.5} />
                 Cerrar sesión
               </button>
             </>
@@ -165,14 +173,14 @@ export function MainNav({ showSearch = true }: MainNavProps) {
               <Link
                 href="/login"
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2 py-3 px-3 rounded-lg hover:bg-muted"
+                className="flex items-center gap-3 py-3.5 px-4 rounded-xl hover:bg-secondary/60 transition-all duration-250"
               >
                 Iniciar sesión
               </Link>
               <Link
                 href="/signup"
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2 py-3 px-3 rounded-lg hover:bg-muted font-medium"
+                className="flex items-center gap-3 py-3.5 px-4 rounded-xl hover:bg-secondary/60 transition-all duration-250 font-medium"
               >
                 Registrarse
               </Link>

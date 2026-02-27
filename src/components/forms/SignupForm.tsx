@@ -99,40 +99,40 @@ export function SignupForm() {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader className="space-y-1 text-center">
+    <Card className="w-full shadow-elevated border-border/60">
+      <CardHeader className="space-y-2 text-center pb-8">
         <CardTitle className="font-display text-2xl">Crear cuenta</CardTitle>
-        <CardDescription>
+        <CardDescription className="text-base">
           Regístrate como abogado o cliente para comenzar
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
+        <CardContent className="space-y-5">
+          <div className="space-y-3">
             <Label>Tipo de cuenta</Label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <button
                 type="button"
                 onClick={() => setRole("abogado")}
-                className={`flex items-center justify-center gap-2 rounded-lg border-2 p-4 transition-all ${
+                className={`flex items-center justify-center gap-2.5 rounded-xl border-2 p-5 transition-all duration-250 ${
                   role === "abogado"
-                    ? "border-primary bg-primary/5"
-                    : "border-border hover:border-muted-foreground/50"
+                    ? "border-primary bg-primary/8 shadow-card"
+                    : "border-border/60 hover:border-primary/30 hover:bg-secondary/50"
                 }`}
               >
-                <Briefcase className="h-5 w-5" />
+                <Briefcase className="h-5 w-5" strokeWidth={1.5} />
                 <span className="font-medium">Abogado</span>
               </button>
               <button
                 type="button"
                 onClick={() => setRole("cliente")}
-                className={`flex items-center justify-center gap-2 rounded-lg border-2 p-4 transition-all ${
+                className={`flex items-center justify-center gap-2.5 rounded-xl border-2 p-5 transition-all duration-250 ${
                   role === "cliente"
-                    ? "border-primary bg-primary/5"
-                    : "border-border hover:border-muted-foreground/50"
+                    ? "border-primary bg-primary/8 shadow-card"
+                    : "border-border/60 hover:border-primary/30 hover:bg-secondary/50"
                 }`}
               >
-                <User className="h-5 w-5" />
+                <User className="h-5 w-5" strokeWidth={1.5} />
                 <span className="font-medium">Cliente</span>
               </button>
             </div>
@@ -202,13 +202,13 @@ export function SignupForm() {
             <p className="text-sm text-destructive">{error}</p>
           )}
         </CardContent>
-        <CardFooter className="flex flex-col gap-4">
-          <Button type="submit" className="w-full" disabled={loading}>
+        <CardFooter className="flex flex-col gap-5 pt-8">
+          <Button type="submit" className="w-full" size="lg" disabled={loading}>
             {loading ? "Creando cuenta..." : "Registrarse"}
           </Button>
           <p className="text-sm text-muted-foreground text-center">
             ¿Ya tienes cuenta?{" "}
-            <Link href="/login" className="text-primary hover:underline">
+            <Link href="/login" className="text-primary hover:underline font-medium">
               Iniciar sesión
             </Link>
           </p>

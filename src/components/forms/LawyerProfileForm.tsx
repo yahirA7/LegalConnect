@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Camera, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { updateLawyerProfile, getLawyerProfile } from "@/lib/firestore";
+import { uploadProfilePhoto } from "@/lib/storage";
 import { SPECIALTIES, type AvailabilitySlot } from "@/lib/types";
 
 const DAYS = [
@@ -31,8 +34,12 @@ export function LawyerProfileForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [photoError, setPhotoError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
+    photoURL: "" as string,
     specialty: "",
     bio: "",
     pricePerHour: "",
@@ -46,7 +53,9 @@ export function LawyerProfileForm() {
     if (!user) return;
     getLawyerProfile(user.uid).then((profile) => {
       if (profile) {
-        setFormData({
+        setFormData((prev) => ({
+          ...prev,
+          photoURL: profile.photoURL ?? "",
           specialty: profile.specialty ?? "",
           bio: profile.bio ?? "",
           pricePerHour: String(profile.pricePerHour ?? ""),
@@ -54,11 +63,28 @@ export function LawyerProfileForm() {
           city: profile.city ?? "",
           country: profile.country ?? "",
           availability: profile.availability ?? [],
-        });
+        }));
       }
       setLoading(false);
     });
   }, [user]);
+
+  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    e.target.value = "";
+    setPhotoError(null);
+    setUploadingPhoto(true);
+    try {
+      const url = await uploadProfilePhoto(user.uid, file);
+      await updateLawyerProfile(user.uid, { photoURL: url });
+      setFormData((p) => ({ ...p, photoURL: url }));
+    } catch (err) {
+      setPhotoError(err instanceof Error ? err.message : "Error al subir la foto");
+    } finally {
+      setUploadingPhoto(false);
+    }
+  };
 
   const addSlot = () => {
     setFormData((prev) => ({
@@ -120,6 +146,57 @@ export function LawyerProfileForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
+      <Card>
+        <CardHeader>
+          <CardTitle>Foto de perfil</CardTitle>
+          <CardDescription>
+            Imagen visible en tu perfil público (JPG, PNG o WebP, máx. 2 MB)
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col sm:flex-row items-start gap-6">
+          <div className="relative group">
+            <div className="w-24 h-24 rounded-full overflow-hidden bg-muted border-2 border-border flex items-center justify-center shrink-0">
+              {formData.photoURL ? (
+                <Image
+                  src={formData.photoURL}
+                  alt="Foto de perfil"
+                  width={96}
+                  height={96}
+                  className="object-cover w-full h-full"
+                  unoptimized
+                />
+              ) : (
+                <Camera className="h-10 w-10 text-muted-foreground" strokeWidth={1.5} />
+              )}
+            </div>
+            {uploadingPhoto && (
+              <div className="absolute inset-0 rounded-full bg-background/80 flex items-center justify-center">
+                <Loader2 className="h-8 w-8 text-primary animate-spin" strokeWidth={2} />
+              </div>
+            )}
+          </div>
+          <div className="space-y-2">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={handlePhotoChange}
+              className="hidden"
+            />
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploadingPhoto}
+            >
+              {formData.photoURL ? "Cambiar foto" : "Subir foto"}
+            </Button>
+            {photoError && <p className="text-sm text-destructive">{photoError}</p>}
+          </div>
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
           <CardTitle>Información profesional</CardTitle>

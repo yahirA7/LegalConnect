@@ -115,16 +115,16 @@ export function LoginForm() {
 
   if (forgotMode) {
     return (
-      <Card className="w-full max-w-md mx-auto">
-        <CardHeader className="space-y-1 text-center">
+      <Card className="w-full shadow-elevated border-border/60">
+        <CardHeader className="space-y-2 text-center pb-8">
           <CardTitle className="font-display text-2xl">Recuperar contraseña</CardTitle>
-          <CardDescription>
+          <CardDescription className="text-base">
             Introduce tu correo y te enviaremos un enlace para restablecerla
           </CardDescription>
         </CardHeader>
         {forgotSuccess ? (
-          <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground text-center">
+          <CardContent className="space-y-6">
+            <p className="text-sm text-muted-foreground text-center leading-relaxed">
               Revisa tu correo. Si existe una cuenta con ese email, recibirás un enlace para restablecer tu contraseña.
             </p>
             <Button variant="outline" className="w-full" onClick={() => { setForgotMode(false); setForgotSuccess(false); }}>
@@ -133,7 +133,7 @@ export function LoginForm() {
           </CardContent>
         ) : (
           <form onSubmit={handleForgotSubmit}>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-5">
               <div className="space-y-2">
                 <Label htmlFor="forgot-email">Correo electrónico</Label>
                 <Input
@@ -147,7 +147,7 @@ export function LoginForm() {
               </div>
               {error && <p className="text-sm text-destructive">{error}</p>}
             </CardContent>
-            <CardFooter className="flex flex-col gap-4">
+            <CardFooter className="flex flex-col gap-4 pt-8">
               <Button type="submit" className="w-full" disabled={forgotLoading}>
                 {forgotLoading ? "Enviando..." : "Enviar enlace"}
               </Button>
@@ -162,15 +162,15 @@ export function LoginForm() {
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader className="space-y-1 text-center">
+    <Card className="w-full shadow-elevated border-border/60">
+      <CardHeader className="space-y-2 text-center pb-8">
         <CardTitle className="font-display text-2xl">Iniciar sesión</CardTitle>
-        <CardDescription>
+        <CardDescription className="text-base">
           Accede a tu cuenta de LegalConnect
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-5">
           <div className="space-y-2">
             <Label htmlFor="email">Correo electrónico</Label>
             <Input
@@ -203,7 +203,7 @@ export function LoginForm() {
             <button
               type="button"
               onClick={() => setForgotMode(true)}
-              className="text-primary hover:underline"
+              className="text-primary hover:underline font-medium transition-colors"
             >
               ¿Olvidaste tu contraseña?
             </button>
@@ -213,13 +213,13 @@ export function LoginForm() {
             <p className="text-sm text-destructive">{error}</p>
           )}
         </CardContent>
-        <CardFooter className="flex flex-col gap-4">
-          <Button type="submit" className="w-full" disabled={loading}>
+        <CardFooter className="flex flex-col gap-5 pt-8">
+          <Button type="submit" className="w-full" size="lg" disabled={loading}>
             {loading ? "Iniciando sesión..." : "Iniciar sesión"}
           </Button>
           <p className="text-sm text-muted-foreground text-center">
             ¿No tienes cuenta?{" "}
-            <Link href="/signup" className="text-primary hover:underline">
+            <Link href="/signup" className="text-primary hover:underline font-medium">
               Regístrate
             </Link>
           </p>
