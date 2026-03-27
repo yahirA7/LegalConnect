@@ -34,7 +34,7 @@ export default function AbogadoPerfilPage() {
       <main className="flex-1 container mx-auto px-4 py-12 max-w-2xl">
         <Link href="/abogado/dashboard" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
           <ArrowLeft className="h-4 w-4" />
-          Volver al dashboard
+          Volver al inicio
         </Link>
         <h1 className="font-display text-2xl font-semibold mb-6">Completar perfil</h1>
         <LawyerProfileForm />

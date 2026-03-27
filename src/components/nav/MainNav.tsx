@@ -26,12 +26,12 @@ export function MainNav({ showSearch = true }: MainNavProps) {
     ? profile.role === "abogado"
       ? [
           { href: "/buscar", label: "Buscar", icon: Search },
-          { href: "/abogado/dashboard", label: "Dashboard", icon: User },
+          { href: "/abogado/dashboard", label: "Inicio", icon: User },
           { href: "/abogado/citas", label: "Citas", icon: Calendar },
         ]
       : [
           { href: "/buscar", label: "Buscar", icon: Search },
-          { href: "/cliente/dashboard", label: "Dashboard", icon: User },
+          { href: "/cliente/dashboard", label: "Inicio", icon: User },
           { href: "/cliente/citas", label: "Mis citas", icon: Calendar },
         ]
     : showSearch
@@ -129,7 +129,7 @@ export function MainNav({ showSearch = true }: MainNavProps) {
                     className="flex items-center gap-3 py-3.5 px-4 rounded-xl hover:bg-secondary/60 transition-all duration-250"
                   >
                     <User className="h-4 w-4" strokeWidth={1.5} />
-                    Dashboard
+                    Inicio
                   </Link>
                   <Link
                     href="/abogado/citas"
@@ -148,7 +148,7 @@ export function MainNav({ showSearch = true }: MainNavProps) {
                     className="flex items-center gap-3 py-3.5 px-4 rounded-xl hover:bg-secondary/60 transition-all duration-250"
                   >
                     <User className="h-4 w-4" strokeWidth={1.5} />
-                    Dashboard
+                    Inicio
                   </Link>
                   <Link
                     href="/cliente/citas"
