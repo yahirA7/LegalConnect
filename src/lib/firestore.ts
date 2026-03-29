@@ -113,6 +113,36 @@ export async function isSlotOccupied(
   return snap.exists();
 }
 
+/** Valida si una hora está dentro de los horarios de disponibilidad del abogado */
+function isTimeInAvailability(
+  date: string,
+  time: string,
+  availability: { dayOfWeek: number; startTime: string; endTime: string }[]
+): boolean {
+  const selectedDate = new Date(date);
+  const dayOfWeek = selectedDate.getDay();
+  
+  const availableSlotsForDay = availability.filter(
+    (slot) => slot.dayOfWeek === dayOfWeek
+  );
+  
+  if (availableSlotsForDay.length === 0) {
+    return false;
+  }
+  
+  const [hours, minutes] = time.split(":").map(Number);
+  const timeInMinutes = hours * 60 + minutes;
+  
+  return availableSlotsForDay.some((slot) => {
+    const [startHours, startMinutes] = slot.startTime.split(":").map(Number);
+    const [endHours, endMinutes] = slot.endTime.split(":").map(Number);
+    const startInMinutes = startHours * 60 + startMinutes;
+    const endInMinutes = endHours * 60 + endMinutes;
+    
+    return timeInMinutes >= startInMinutes && timeInMinutes < endInMinutes;
+  });
+}
+
 export async function createAppointment(
   lawyerId: string,
   date: string,
@@ -121,6 +151,20 @@ export async function createAppointment(
 ) {
   requireDb();
   if (!auth?.currentUser) throw new Error("Debes iniciar sesión para reservar");
+  
+  const lawyerProfile = await getLawyerProfile(lawyerId);
+  if (!lawyerProfile) {
+    throw new Error("Abogado no encontrado");
+  }
+  
+  if (!lawyerProfile.availability || lawyerProfile.availability.length === 0) {
+    throw new Error("Este abogado no tiene horarios disponibles configurados");
+  }
+  
+  if (!isTimeInAvailability(date, time, lawyerProfile.availability)) {
+    throw new Error("El horario seleccionado no está dentro de la disponibilidad del abogado");
+  }
+  
   const clientId = auth.currentUser.uid;
   const slotId = `${lawyerId}_${date}_${time}`;
   const slotRef = doc(db!, BOOKED_SLOTS, slotId);

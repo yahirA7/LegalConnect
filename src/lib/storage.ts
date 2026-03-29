@@ -1,5 +1,5 @@
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "./firebase";
+import { auth, storage } from "./firebase";
 
 const MAX_SIZE_MB = 2;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -20,6 +20,16 @@ export function validateImageFile(file: File): string | null {
  */
 export async function uploadProfilePhoto(uid: string, file: File): Promise<string> {
   if (!storage) throw new Error("Firebase Storage no configurado. Revisa .env.local");
+
+  if (!auth?.currentUser) {
+    throw new Error("Debes iniciar sesión para subir una foto.");
+  }
+
+  if (auth.currentUser.uid !== uid) {
+    throw new Error("Sesión inválida: el usuario autenticado no coincide.");
+  }
+
+  await auth.currentUser.getIdToken(true);
 
   const err = validateImageFile(file);
   if (err) throw new Error(err);

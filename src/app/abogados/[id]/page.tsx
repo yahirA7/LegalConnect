@@ -19,6 +19,7 @@ import { StarRating } from "@/components/reviews/StarRating";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
 import { ReviewList } from "@/components/reviews/ReviewList";
 import { BookingForm } from "@/components/appointments/BookingForm";
+import { AvailabilityDisplay } from "@/components/appointments/AvailabilityDisplay";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { MainNav } from "@/components/nav/MainNav";
 
@@ -146,6 +147,18 @@ export default function LawyerPublicProfilePage() {
                   </CardContent>
                 </Card>
               )}
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Disponibilidad</CardTitle>
+                  <CardDescription>
+                    Horarios de atención
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <AvailabilityDisplay availability={lawyer.availability || []} />
+                </CardContent>
+              </Card>
 
               <Card>
                 <CardHeader>
