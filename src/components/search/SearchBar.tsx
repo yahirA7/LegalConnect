@@ -26,7 +26,7 @@ export function SearchBar({
   onSearch,
 }: SearchBarProps) {
   return (
-    <div className="p-6 md:p-8 rounded-2xl bg-card/80 border border-border/50 shadow-card space-y-6">
+    <div className="p-6 md:p-8 rounded-2xl bg-card border border-border/60 shadow-card space-y-6">
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
@@ -49,7 +49,7 @@ export function SearchBar({
           <select
             value={specialty}
             onChange={(e) => onSpecialtyChange(e.target.value)}
-            className="h-10 rounded-xl border border-border/80 bg-background/80 px-4 text-sm transition-all duration-250 focus:outline-none focus:ring-2 focus:ring-ring/40 focus:ring-offset-2 hover:border-border"
+            className="h-10 rounded-xl border border-border/80 bg-card px-4 text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring/40 focus:ring-offset-2 hover:border-border"
           >
             <option value="">Todas</option>
             {SPECIALTIES.map((s) => (
@@ -64,7 +64,7 @@ export function SearchBar({
           <select
             value={minRating}
             onChange={(e) => onMinRatingChange(Number(e.target.value))}
-            className="h-10 rounded-xl border border-border/80 bg-background/80 px-4 text-sm transition-all duration-250 focus:outline-none focus:ring-2 focus:ring-ring/40 focus:ring-offset-2 hover:border-border"
+            className="h-10 rounded-xl border border-border/80 bg-card px-4 text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring/40 focus:ring-offset-2 hover:border-border"
           >
             <option value={0}>Cualquiera</option>
             <option value={4}>4+ estrellas</option>

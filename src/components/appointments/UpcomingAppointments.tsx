@@ -24,9 +24,11 @@ export function UpcomingAppointments({ uid, asClient }: UpcomingAppointmentsProp
   if (loading) return <p className="text-sm text-muted-foreground">Cargando...</p>;
   if (appointments.length === 0) {
     return (
-      <p className="text-sm text-muted-foreground">
-        No tienes citas próximas.
-      </p>
+      <div className="min-h-[220px] flex items-center justify-center rounded-2xl border border-border/60 bg-muted/20">
+        <p className="text-sm text-muted-foreground text-center">
+          No tienes citas próximas.
+        </p>
+      </div>
     );
   }
 
@@ -35,7 +37,7 @@ export function UpcomingAppointments({ uid, asClient }: UpcomingAppointmentsProp
       {appointments.map((apt) => (
         <div
           key={apt.id}
-          className="flex items-center justify-between gap-4 p-3 rounded-lg border bg-card"
+          className="flex items-center justify-between gap-4 p-4 rounded-2xl border border-border/60 bg-muted/20"
         >
           <div className="min-w-0">
             <p className="font-medium truncate">{apt.otherName}</p>

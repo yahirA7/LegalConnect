@@ -10,9 +10,67 @@ export default function HomePage() {
 
       <main className="flex-1">
         <section className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-muted/40 via-transparent to-transparent" />
-          <div className="absolute top-20 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 left-0 w-80 h-80 bg-accent/5 rounded-full blur-3xl" />
+          <div className="absolute inset-0 bg-gradient-to-b from-secondary/70 via-transparent to-transparent" />
+          <div className="absolute top-16 right-0 w-96 h-96 bg-primary/6 rounded-full blur-3xl" />
+          <div className="absolute -bottom-10 left-0 w-80 h-80 bg-accent/6 rounded-full blur-3xl" />
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 1200 600"
+              className="w-[1100px] max-w-[120%] opacity-[0.07]"
+              fill="none"
+            >
+              <path
+                d="M600 110v320"
+                stroke="currentColor"
+                className="text-primary"
+                strokeWidth="8"
+                strokeLinecap="round"
+              />
+              <path
+                d="M420 200h360"
+                stroke="currentColor"
+                className="text-primary"
+                strokeWidth="8"
+                strokeLinecap="round"
+              />
+              <path
+                d="M420 200l-140 220"
+                stroke="currentColor"
+                className="text-primary"
+                strokeWidth="6"
+                strokeLinecap="round"
+              />
+              <path
+                d="M780 200l140 220"
+                stroke="currentColor"
+                className="text-primary"
+                strokeWidth="6"
+                strokeLinecap="round"
+              />
+              <path
+                d="M240 460c60 55 160 55 220 0"
+                stroke="currentColor"
+                className="text-primary"
+                strokeWidth="8"
+                strokeLinecap="round"
+              />
+              <path
+                d="M740 460c60 55 160 55 220 0"
+                stroke="currentColor"
+                className="text-primary"
+                strokeWidth="8"
+                strokeLinecap="round"
+              />
+              <path
+                d="M520 120c55-45 105-45 160 0"
+                stroke="currentColor"
+                className="text-accent"
+                strokeWidth="6"
+                strokeLinecap="round"
+              />
+            </svg>
+          </div>
           <div className="container relative mx-auto px-4 py-28 md:py-40 text-center">
             <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight max-w-4xl mx-auto text-foreground leading-[1.1]">
               Conecta con abogados de confianza

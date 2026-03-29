@@ -7,59 +7,59 @@
 
 @layer base {
   :root {
-    /* Fondos y superficies - crema cálido con sutileza */
-    --background: 40 33% 98%;
-    --foreground: 220 20% 12%;
-    --card: 0 0% 100%;
-    --card-foreground: 220 20% 12%;
-    /* Azul medianoche - autoridad y profundidad */
+    /* Fondos y superficies - blanco hueso suave */
+    --background: 40 30% 98%;
+    --foreground: 222 22% 14%;
+    --card: 40 30% 99%;
+    --card-foreground: 222 22% 14%;
+    /* Primario - azul marino profundo */
     --primary: 222 47% 11%;
-    --primary-foreground: 40 33% 98%;
-    /* Secundario - crema suave */
-    --secondary: 40 25% 96%;
-    --secondary-foreground: 220 20% 12%;
+    --primary-foreground: 40 30% 98%;
+    /* Secundario - marfil/gris cálido */
+    --secondary: 40 18% 95%;
+    --secondary-foreground: 222 22% 14%;
     /* Muted - fondos sutiles */
-    --muted: 40 20% 94%;
-    --muted-foreground: 220 12% 42%;
-    /* Acento premium - dorado oscuro */
-    --accent: 43 74% 38%;
-    --accent-foreground: 40 33% 98%;
-    --accent-emerald: 165 86% 16%;
+    --muted: 40 16% 93%;
+    --muted-foreground: 220 10% 42%;
+    /* Acento - borgoña/vino */
+    --accent: 345 55% 30%;
+    --accent-foreground: 40 30% 98%;
+    --accent-emerald: 345 55% 30%;
     --destructive: 0 84% 60%;
     /* Bordes con degradado sutil */
-    --border: 40 15% 90%;
-    --input: 40 15% 92%;
+    --border: 40 12% 88%;
+    --input: 40 12% 90%;
     --ring: 222 47% 11%;
     --radius: 0.75rem;
     /* Sombras premium */
-    --shadow-soft: 0 4px 24px -4px rgb(15 23 42 / 0.06), 0 8px 48px -8px rgb(15 23 42 / 0.04);
-    --shadow-elevated: 0 12px 40px -8px rgb(15 23 42 / 0.08), 0 24px 64px -16px rgb(15 23 42 / 0.06);
-    --shadow-glow: 0 0 40px -8px rgb(184 134 11 / 0.15);
+    --shadow-soft: 0 1px 2px rgb(2 6 23 / 0.04), 0 10px 24px -14px rgb(2 6 23 / 0.10);
+    --shadow-elevated: 0 2px 8px rgb(2 6 23 / 0.06), 0 24px 56px -28px rgb(2 6 23 / 0.18);
+    --shadow-glow: 0 0 36px -10px rgb(129 35 64 / 0.18);
     /* Glassmorphism */
-    --glass-bg: rgba(255 255 255 / 0.72);
-    --glass-border: rgba(255 255 255 / 0.5);
+    --glass-bg: rgba(250 248 245 / 0.76);
+    --glass-border: rgba(2 6 23 / 0.08);
   }
 
   .dark {
     --background: 222 47% 6%;
-    --foreground: 40 20% 96%;
+    --foreground: 40 18% 96%;
     --card: 222 47% 8%;
-    --card-foreground: 40 20% 96%;
-    --primary: 43 74% 48%;
+    --card-foreground: 40 18% 96%;
+    --primary: 40 18% 96%;
     --primary-foreground: 222 47% 6%;
     --secondary: 222 30% 12%;
-    --secondary-foreground: 40 20% 96%;
+    --secondary-foreground: 40 18% 96%;
     --muted: 222 30% 12%;
     --muted-foreground: 220 10% 60%;
-    --accent: 43 74% 48%;
+    --accent: 345 55% 44%;
     --accent-foreground: 222 47% 6%;
     --destructive: 0 62% 50%;
     --border: 222 25% 16%;
     --input: 222 25% 14%;
-    --ring: 43 74% 48%;
-    --shadow-soft: 0 4px 24px -4px rgb(0 0 0 / 0.2);
-    --shadow-elevated: 0 12px 40px -8px rgb(0 0 0 / 0.3);
-    --glass-bg: rgba(15 23 42 / 0.6);
+    --ring: 345 55% 44%;
+    --shadow-soft: 0 2px 10px -6px rgb(0 0 0 / 0.30);
+    --shadow-elevated: 0 18px 46px -22px rgb(0 0 0 / 0.55);
+    --glass-bg: rgba(2 6 23 / 0.55);
     --glass-border: rgba(255 255 255 / 0.08);
   }
 }
@@ -70,7 +70,8 @@
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.005em;
+    line-height: 1.65;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-display font-semibold tracking-tight;

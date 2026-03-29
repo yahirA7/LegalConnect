@@ -100,6 +100,22 @@ export async function searchLawyers(filters: {
   return lawyers;
 }
 
+export async function getTopRatedLawyers(limitCount = 4) {
+  if (!db) return [];
+  const snapshot = await getDocs(
+    query(
+      collection(db, USERS),
+      where("role", "==", "abogado"),
+      limit(Math.max(limitCount * 25, 100))
+    )
+  );
+  const rows = snapshot.docs.map((d) => ({ uid: d.id, ...d.data() } as DocumentData));
+  return rows
+    .filter((l) => (l.rating ?? 0) > 0)
+    .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
+    .slice(0, limitCount);
+}
+
 /** Comprueba si un horario está ocupado usando booked_slots (sin exponer datos de otras citas). */
 export async function isSlotOccupied(
   lawyerId: string,

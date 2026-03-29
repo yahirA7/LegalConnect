@@ -39,7 +39,7 @@ export function MainNav({ showSearch = true }: MainNavProps) {
       : [];
 
   return (
-    <header className="sticky top-0 z-50 glass border-b border-border/40 shadow-soft">
+    <header className="sticky top-0 z-50 glass border-b border-border/50">
       <div className="container mx-auto px-4 h-16 md:h-[4.5rem] flex items-center justify-between">
         <Link
           href="/"
@@ -85,7 +85,7 @@ export function MainNav({ showSearch = true }: MainNavProps) {
                 <Button variant="ghost" size="sm">Iniciar sesión</Button>
               </Link>
               <Link href="/signup">
-                <Button size="sm">Registrarse</Button>
+                <Button size="sm" className="shadow-soft hover:shadow-elevated">Registrarse</Button>
               </Link>
             </>
           )}
