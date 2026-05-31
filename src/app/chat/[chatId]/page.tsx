@@ -8,7 +8,7 @@ import { MainNav } from "@/components/nav/MainNav";
 import { ProfileAvatar } from "@/components/ui/ProfileAvatar";
 import { ChatWindow } from "@/components/chat/ChatWindow";
 import { useAuth } from "@/components/providers/AuthProvider";
-import { getOrCreateChat } from "@/lib/firestore";
+import { getOrCreateChat, markChatAsRead } from "@/lib/firestore";
 import type { Chat } from "@/lib/types";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -31,6 +31,11 @@ export default function ChatPage() {
       setChatLoading(false);
     });
   }, [chatId]);
+
+  useEffect(() => {
+    if (!user || !chatId) return;
+    markChatAsRead(chatId, user.uid);
+  }, [chatId, user]);
 
   if (loading || chatLoading || !profile || !user) {
     return (

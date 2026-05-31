@@ -8,6 +8,7 @@ import { useAuth } from "@/components/providers/AuthProvider";
 import { signOut } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { ProfileAvatar } from "@/components/ui/ProfileAvatar";
+import { useUnreadChats } from "@/hooks/useUnreadChats";
 
 interface MainNavProps {
   showSearch?: boolean;
@@ -16,6 +17,7 @@ interface MainNavProps {
 export function MainNav({ showSearch = true }: MainNavProps) {
   const { user, profile } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const unreadChats = useUnreadChats(user?.uid, profile?.role);
 
   const handleSignOut = async () => {
     setMobileOpen(false);
@@ -76,9 +78,14 @@ export function MainNav({ showSearch = true }: MainNavProps) {
               </div>
               {navLinks.slice(1).map((link) => (
                 <Link key={link.href} href={link.href}>
-                  <Button variant="ghost" size="sm" className="gap-2">
+                  <Button variant="ghost" size="sm" className="gap-2 relative">
                     <link.icon className="h-4 w-4" strokeWidth={1.5} />
                     {link.label}
+                    {link.href === "/chat" && unreadChats > 0 && (
+                      <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">
+                        {unreadChats > 9 ? "9+" : unreadChats}
+                      </span>
+                    )}
                   </Button>
                 </Link>
               ))}
@@ -157,8 +164,18 @@ export function MainNav({ showSearch = true }: MainNavProps) {
                     onClick={() => setMobileOpen(false)}
                     className="flex items-center gap-3 py-3.5 px-4 rounded-xl hover:bg-secondary/60 transition-all duration-250"
                   >
-                    <MessageSquare className="h-4 w-4" strokeWidth={1.5} />
+                    <span className="relative">
+                      <MessageSquare className="h-4 w-4" strokeWidth={1.5} />
+                      {unreadChats > 0 && (
+                        <span className="absolute -top-1.5 -right-1.5 h-3.5 w-3.5 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
+                          {unreadChats > 9 ? "9+" : unreadChats}
+                        </span>
+                      )}
+                    </span>
                     Mensajes
+                    {unreadChats > 0 && (
+                      <span className="ml-auto text-xs font-bold text-red-500">{unreadChats}</span>
+                    )}
                   </Link>
                 </>
               ) : (
@@ -184,8 +201,18 @@ export function MainNav({ showSearch = true }: MainNavProps) {
                     onClick={() => setMobileOpen(false)}
                     className="flex items-center gap-3 py-3.5 px-4 rounded-xl hover:bg-secondary/60 transition-all duration-250"
                   >
-                    <MessageSquare className="h-4 w-4" strokeWidth={1.5} />
+                    <span className="relative">
+                      <MessageSquare className="h-4 w-4" strokeWidth={1.5} />
+                      {unreadChats > 0 && (
+                        <span className="absolute -top-1.5 -right-1.5 h-3.5 w-3.5 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
+                          {unreadChats > 9 ? "9+" : unreadChats}
+                        </span>
+                      )}
+                    </span>
                     Mensajes
+                    {unreadChats > 0 && (
+                      <span className="ml-auto text-xs font-bold text-red-500">{unreadChats}</span>
+                    )}
                   </Link>
                 </>
               )}

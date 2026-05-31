@@ -94,4 +94,5 @@ export interface Chat {
   lastMessage?: string;
   lastMessageAt?: string;
   lastSenderId?: string;
+  [key: `lastRead_${string}`]: string | undefined;
 }

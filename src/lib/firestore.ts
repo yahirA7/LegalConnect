@@ -423,6 +423,13 @@ export function subscribeToMessages(
   });
 }
 
+/** Marca el chat como leído para el usuario actual. */
+export async function markChatAsRead(chatId: string, uid: string) {
+  if (!db) return;
+  const chatRef = doc(db, CHATS, chatId);
+  await updateDoc(chatRef, { [`lastRead_${uid}`]: new Date().toISOString() });
+}
+
 /** Obtiene todos los chats de un usuario (como cliente o abogado). */
 export function subscribeToChats(
   uid: string,
