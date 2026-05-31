@@ -85,17 +85,28 @@ export default function LawyerPublicProfilePage() {
   const isClient = profile?.role === "cliente";
   const canReview = isClient && user && !existingReview;
 
+  const [chatLoading, setChatLoading] = useState(false);
+
   async function handleStartChat() {
-    if (!user || !profile || !lawyer) return;
-    const chatId = await getOrCreateChat(
-      user.uid,
-      profile.displayName,
-      profile.photoURL,
-      lawyer.uid,
-      lawyer.displayName,
-      lawyer.photoURL ?? undefined
-    );
-    router.push(`/chat/${chatId}`);
+    if (!user || !profile) {
+      router.push("/login");
+      return;
+    }
+    if (!lawyer) return;
+    setChatLoading(true);
+    try {
+      const chatId = await getOrCreateChat(
+        user.uid,
+        profile.displayName,
+        profile.photoURL,
+        lawyer.uid,
+        lawyer.displayName,
+        lawyer.photoURL ?? undefined
+      );
+      router.push(`/chat/${chatId}`);
+    } finally {
+      setChatLoading(false);
+    }
   }
   const displayRating = reviews.length > 0
     ? reviews.reduce((a, r) => a + r.rating, 0) / reviews.length
@@ -145,15 +156,29 @@ export default function LawyerPublicProfilePage() {
                 </span>
               )}
             </div>
-            {isClient && user && (
+            {isClient && user ? (
               <Button
                 onClick={handleStartChat}
+                disabled={chatLoading}
                 className="mt-4 w-full sm:w-auto gap-2 bg-[#0f172a] text-white hover:bg-[#0b1220]"
               >
-                <MessageSquare className="h-4 w-4" strokeWidth={1.5} />
-                Enviar mensaje
+                {chatLoading ? (
+                  <div className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                ) : (
+                  <MessageSquare className="h-4 w-4" strokeWidth={1.5} />
+                )}
+                {chatLoading ? "Abriendo..." : "Enviar mensaje"}
               </Button>
-            )}
+            ) : !user ? (
+              <Button
+                onClick={() => router.push("/login")}
+                variant="outline"
+                className="mt-4 w-full sm:w-auto gap-2"
+              >
+                <MessageSquare className="h-4 w-4" strokeWidth={1.5} />
+                Inicia sesión para chatear
+              </Button>
+            ) : null}
             </div>
           </div>
 
