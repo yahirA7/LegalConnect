@@ -32,6 +32,8 @@ export default function LawyerPublicProfilePage() {
   const [reviews, setReviews] = useState<{ id: string; authorName: string; rating: number; comment: string; createdAt: string }[]>([]);
   const [existingReview, setExistingReview] = useState<{ id: string; rating: number; comment: string } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [chatLoading, setChatLoading] = useState(false);
+  const [chatError, setChatError] = useState<string | null>(null);
 
   const refreshReviews = () => {
     if (!id) return;
@@ -84,10 +86,6 @@ export default function LawyerPublicProfilePage() {
 
   const isClient = profile?.role === "cliente";
   const canReview = isClient && user && !existingReview;
-
-  const [chatLoading, setChatLoading] = useState(false);
-
-  const [chatError, setChatError] = useState<string | null>(null);
 
   async function handleStartChat() {
     if (!user || !profile) {

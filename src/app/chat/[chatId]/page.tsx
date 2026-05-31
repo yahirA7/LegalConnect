@@ -8,7 +8,7 @@ import { MainNav } from "@/components/nav/MainNav";
 import { ProfileAvatar } from "@/components/ui/ProfileAvatar";
 import { ChatWindow } from "@/components/chat/ChatWindow";
 import { useAuth } from "@/components/providers/AuthProvider";
-import { getOrCreateChat, markChatAsRead } from "@/lib/firestore";
+import { markChatAsRead } from "@/lib/firestore";
 import type { Chat } from "@/lib/types";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
