@@ -3,6 +3,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  setDoc,
   updateDoc,
   addDoc,
   deleteDoc,
@@ -10,8 +11,11 @@ import {
   where,
   orderBy,
   limit,
+  onSnapshot,
   runTransaction,
+  serverTimestamp,
   type DocumentData,
+  type Unsubscribe,
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
@@ -23,6 +27,8 @@ import type {
   LawyerProfile,
   Appointment,
   Specialty,
+  Chat,
+  ChatMessage,
 } from "./types";
 import { SPECIALTIES } from "./types";
 
@@ -355,6 +361,83 @@ export async function getUserReviewForLawyer(
   if (!doc) return null;
   const d = doc.data();
   return { id: doc.id, rating: d.rating, comment: d.comment };
+}
+
+const CHATS = "chats";
+
+/** Obtiene o crea un chat entre cliente y abogado. Devuelve el chatId. */
+export async function getOrCreateChat(
+  clientId: string,
+  clientName: string,
+  clientPhoto: string | undefined,
+  lawyerId: string,
+  lawyerName: string,
+  lawyerPhoto: string | undefined
+): Promise<string> {
+  requireDb();
+  const chatId = [clientId, lawyerId].sort().join("_");
+  const chatRef = doc(db!, CHATS, chatId);
+  const snap = await getDoc(chatRef);
+  if (!snap.exists()) {
+    await setDoc(chatRef, {
+      clientId,
+      lawyerId,
+      clientName,
+      lawyerName,
+      clientPhoto: clientPhoto ?? null,
+      lawyerPhoto: lawyerPhoto ?? null,
+      lastMessage: null,
+      lastMessageAt: null,
+      lastSenderId: null,
+    } satisfies Omit<Chat, "id">);
+  }
+  return chatId;
+}
+
+/** Envía un mensaje a un chat. */
+export async function sendMessage(chatId: string, senderId: string, text: string) {
+  requireDb();
+  const sanitized = sanitizeText(text, 2000);
+  if (!sanitized.trim()) return;
+  const now = new Date().toISOString();
+  const messagesRef = collection(db!, CHATS, chatId, "messages");
+  await addDoc(messagesRef, { senderId, text: sanitized, createdAt: now });
+  const chatRef = doc(db!, CHATS, chatId);
+  await updateDoc(chatRef, { lastMessage: sanitized, lastMessageAt: now, lastSenderId: senderId });
+}
+
+/** Escucha mensajes de un chat en tiempo real. */
+export function subscribeToMessages(
+  chatId: string,
+  callback: (messages: ChatMessage[]) => void
+): Unsubscribe {
+  if (!db) return () => {};
+  const q = query(
+    collection(db, CHATS, chatId, "messages"),
+    orderBy("createdAt", "asc"),
+    limit(200)
+  );
+  return onSnapshot(q, (snap) => {
+    const msgs = snap.docs.map((d) => ({ id: d.id, ...d.data() } as ChatMessage));
+    callback(msgs);
+  });
+}
+
+/** Obtiene todos los chats de un usuario (como cliente o abogado). */
+export function subscribeToChats(
+  uid: string,
+  role: "cliente" | "abogado",
+  callback: (chats: Chat[]) => void
+): Unsubscribe {
+  if (!db) return () => {};
+  const field = role === "cliente" ? "clientId" : "lawyerId";
+  const q = query(collection(db, CHATS), where(field, "==", uid));
+  return onSnapshot(q, (snap) => {
+    const chats = snap.docs
+      .map((d) => ({ id: d.id, ...d.data() } as Chat))
+      .sort((a, b) => (b.lastMessageAt ?? "").localeCompare(a.lastMessageAt ?? ""));
+    callback(chats);
+  });
 }
 
 export { SPECIALTIES };

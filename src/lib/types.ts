@@ -75,3 +75,23 @@ export const SPECIALTIES = [
 ] as const;
 
 export type Specialty = (typeof SPECIALTIES)[number];
+
+export interface ChatMessage {
+  id: string;
+  senderId: string;
+  text: string;
+  createdAt: string;
+}
+
+export interface Chat {
+  id: string;
+  clientId: string;
+  lawyerId: string;
+  clientName: string;
+  lawyerName: string;
+  clientPhoto?: string;
+  lawyerPhoto?: string;
+  lastMessage?: string;
+  lastMessageAt?: string;
+  lastSenderId?: string;
+}

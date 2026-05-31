@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Scale, Search, Calendar, User, LogOut, Menu, X } from "lucide-react";
+import { Scale, Search, Calendar, User, LogOut, Menu, X, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { signOut } from "@/lib/auth";
@@ -29,11 +29,13 @@ export function MainNav({ showSearch = true }: MainNavProps) {
           { href: "/buscar", label: "Buscar", icon: Search },
           { href: "/abogado/dashboard", label: "Inicio", icon: User },
           { href: "/abogado/citas", label: "Citas", icon: Calendar },
+          { href: "/chat", label: "Mensajes", icon: MessageSquare },
         ]
       : [
           { href: "/buscar", label: "Buscar", icon: Search },
           { href: "/cliente/dashboard", label: "Inicio", icon: User },
           { href: "/cliente/citas", label: "Mis citas", icon: Calendar },
+          { href: "/chat", label: "Mensajes", icon: MessageSquare },
         ]
     : showSearch
       ? [{ href: "/buscar", label: "Buscar", icon: Search }]
@@ -150,6 +152,14 @@ export function MainNav({ showSearch = true }: MainNavProps) {
                     <Calendar className="h-4 w-4" strokeWidth={1.5} />
                     Citas
                   </Link>
+                  <Link
+                    href="/chat"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-3 py-3.5 px-4 rounded-xl hover:bg-secondary/60 transition-all duration-250"
+                  >
+                    <MessageSquare className="h-4 w-4" strokeWidth={1.5} />
+                    Mensajes
+                  </Link>
                 </>
               ) : (
                 <>
@@ -168,6 +178,14 @@ export function MainNav({ showSearch = true }: MainNavProps) {
                   >
                     <Calendar className="h-4 w-4" strokeWidth={1.5} />
                     Mis citas
+                  </Link>
+                  <Link
+                    href="/chat"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-3 py-3.5 px-4 rounded-xl hover:bg-secondary/60 transition-all duration-250"
+                  >
+                    <MessageSquare className="h-4 w-4" strokeWidth={1.5} />
+                    Mensajes
                   </Link>
                 </>
               )}

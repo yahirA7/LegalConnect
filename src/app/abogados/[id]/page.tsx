@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { MapPin, DollarSign, ArrowLeft } from "lucide-react";
+import { MapPin, DollarSign, ArrowLeft, MessageSquare } from "lucide-react";
 import { ProfileAvatar } from "@/components/ui/ProfileAvatar";
 import { formatPricePerHour } from "@/lib/format";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getLawyerProfile, getReviewsByLawyer, getUserReviewForLawyer } from "@/lib/firestore";
+import { getLawyerProfile, getReviewsByLawyer, getUserReviewForLawyer, getOrCreateChat } from "@/lib/firestore";
 import { StarRating } from "@/components/reviews/StarRating";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
 import { ReviewList } from "@/components/reviews/ReviewList";
@@ -84,6 +84,19 @@ export default function LawyerPublicProfilePage() {
 
   const isClient = profile?.role === "cliente";
   const canReview = isClient && user && !existingReview;
+
+  async function handleStartChat() {
+    if (!user || !profile || !lawyer) return;
+    const chatId = await getOrCreateChat(
+      user.uid,
+      profile.displayName,
+      profile.photoURL,
+      lawyer.uid,
+      lawyer.displayName,
+      lawyer.photoURL ?? undefined
+    );
+    router.push(`/chat/${chatId}`);
+  }
   const displayRating = reviews.length > 0
     ? reviews.reduce((a, r) => a + r.rating, 0) / reviews.length
     : lawyer.rating;
@@ -98,6 +111,16 @@ export default function LawyerPublicProfilePage() {
             <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
             Volver a buscar
           </Link>
+          <div className="mb-10 flex flex-col sm:flex-row sm:items-start gap-6 justify-between">
+            {isClient && user && (
+              <div className="sm:ml-auto sm:order-last">
+                <Button onClick={handleStartChat} className="gap-2 bg-[#0f172a] text-white hover:bg-[#0b1220]">
+                  <MessageSquare className="h-4 w-4" strokeWidth={1.5} />
+                  Enviar mensaje
+                </Button>
+              </div>
+            )}
+          </div>
           <div className="mb-10 flex flex-col sm:flex-row sm:items-center gap-6">
             <ProfileAvatar
               src={lawyer.photoURL}
