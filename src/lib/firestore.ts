@@ -384,11 +384,11 @@ export async function getOrCreateChat(
       lawyerId,
       clientName,
       lawyerName,
-      clientPhoto: clientPhoto ?? null,
-      lawyerPhoto: lawyerPhoto ?? null,
-      lastMessage: null,
-      lastMessageAt: null,
-      lastSenderId: null,
+      clientPhoto: clientPhoto ?? undefined,
+      lawyerPhoto: lawyerPhoto ?? undefined,
+      lastMessage: undefined,
+      lastMessageAt: undefined,
+      lastSenderId: undefined,
     } satisfies Omit<Chat, "id">);
   }
   return chatId;
