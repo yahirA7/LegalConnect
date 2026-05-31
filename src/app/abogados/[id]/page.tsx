@@ -87,6 +87,8 @@ export default function LawyerPublicProfilePage() {
 
   const [chatLoading, setChatLoading] = useState(false);
 
+  const [chatError, setChatError] = useState<string | null>(null);
+
   async function handleStartChat() {
     if (!user || !profile) {
       router.push("/login");
@@ -94,6 +96,7 @@ export default function LawyerPublicProfilePage() {
     }
     if (!lawyer) return;
     setChatLoading(true);
+    setChatError(null);
     try {
       const chatId = await getOrCreateChat(
         user.uid,
@@ -104,6 +107,9 @@ export default function LawyerPublicProfilePage() {
         lawyer.photoURL ?? undefined
       );
       router.push(`/chat/${chatId}`);
+    } catch (err) {
+      console.error("Error al abrir chat:", err);
+      setChatError(err instanceof Error ? err.message : "Error al abrir el chat");
     } finally {
       setChatLoading(false);
     }
@@ -157,18 +163,23 @@ export default function LawyerPublicProfilePage() {
               )}
             </div>
             {isClient && user ? (
-              <Button
-                onClick={handleStartChat}
-                disabled={chatLoading}
-                className="mt-4 w-full sm:w-auto gap-2 bg-[#0f172a] text-white hover:bg-[#0b1220]"
-              >
-                {chatLoading ? (
-                  <div className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                ) : (
-                  <MessageSquare className="h-4 w-4" strokeWidth={1.5} />
+              <div className="mt-4 flex flex-col gap-1">
+                <Button
+                  onClick={handleStartChat}
+                  disabled={chatLoading}
+                  className="w-full sm:w-auto gap-2 bg-[#0f172a] text-white hover:bg-[#0b1220]"
+                >
+                  {chatLoading ? (
+                    <div className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                  ) : (
+                    <MessageSquare className="h-4 w-4" strokeWidth={1.5} />
+                  )}
+                  {chatLoading ? "Abriendo..." : "Enviar mensaje"}
+                </Button>
+                {chatError && (
+                  <p className="text-xs text-red-500">{chatError}</p>
                 )}
-                {chatLoading ? "Abriendo..." : "Enviar mensaje"}
-              </Button>
+              </div>
             ) : !user ? (
               <Button
                 onClick={() => router.push("/login")}
