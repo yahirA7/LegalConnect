@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { MainNav } from "@/components/nav/MainNav";
 import { SearchBar } from "@/components/search/SearchBar";
@@ -11,7 +11,7 @@ import type { Specialty } from "@/lib/types";
 
 const PAGE_SIZE = 12;
 
-export default function BuscarPage() {
+function BuscarContent() {
   const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
   const [specialty, setSpecialty] = useState("");
@@ -111,5 +111,13 @@ export default function BuscarPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function BuscarPage() {
+  return (
+    <Suspense>
+      <BuscarContent />
+    </Suspense>
   );
 }
