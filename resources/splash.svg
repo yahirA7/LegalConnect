@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2732 2732" width="2732" height="2732">
+  <!-- Fondo -->
+  <rect width="2732" height="2732" fill="#1a1a2e"/>
+
+  <!-- Gradiente sutil -->
+  <radialGradient id="bg-grad" cx="50%" cy="50%" r="60%">
+    <stop offset="0%" stop-color="#1e2040"/>
+    <stop offset="100%" stop-color="#1a1a2e"/>
+  </radialGradient>
+  <rect width="2732" height="2732" fill="url(#bg-grad)"/>
+
+  <!-- Escala de justicia (centrada, más grande) -->
+  <!-- Poste central -->
+  <rect x="1349" y="980" width="34" height="580" rx="6" fill="#c9a84c"/>
+
+  <!-- Base -->
+  <rect x="1166" y="1548" width="400" height="44" rx="10" fill="#c9a84c"/>
+  <rect x="1240" y="1584" width="252" height="26" rx="8" fill="#a08030"/>
+
+  <!-- Barra horizontal -->
+  <rect x="1066" y="988" width="600" height="28" rx="8" fill="#c9a84c"/>
+
+  <!-- Platillo izquierdo -->
+  <line x1="1130" y1="1016" x2="1030" y2="1200" stroke="#c9a84c" stroke-width="10" stroke-linecap="round"/>
+  <ellipse cx="1030" cy="1210" rx="130" ry="28" fill="#c9a84c"/>
+  <path d="M900 1210 Q1030 1270 1160 1210" fill="none" stroke="#c9a84c" stroke-width="10"/>
+
+  <!-- Platillo derecho -->
+  <line x1="1602" y1="1016" x2="1702" y2="1200" stroke="#c9a84c" stroke-width="10" stroke-linecap="round"/>
+  <ellipse cx="1702" cy="1210" rx="130" ry="28" fill="#c9a84c"/>
+  <path d="M1572 1210 Q1702 1270 1832 1210" fill="none" stroke="#c9a84c" stroke-width="10"/>
+
+  <!-- Punto central -->
+  <circle cx="1366" cy="980" r="24" fill="#c9a84c"/>
+  <circle cx="1130" cy="1016" r="14" fill="#c9a84c"/>
+  <circle cx="1602" cy="1016" r="14" fill="#c9a84c"/>
+
+  <!-- Nombre de la app -->
+  <text x="1366" y="1740" font-family="Georgia, serif" font-size="160" font-weight="bold" fill="#c9a84c" text-anchor="middle" letter-spacing="8">LegalConnect</text>
+  <text x="1366" y="1840" font-family="Georgia, serif" font-size="64" fill="#8899aa" text-anchor="middle" letter-spacing="4">Tu abogado, cuando más lo necesitas</text>
+</svg>

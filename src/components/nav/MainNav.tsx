@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { signOut } from "@/lib/auth";
 import { cn } from "@/lib/utils";
+import { ProfileAvatar } from "@/components/ui/ProfileAvatar";
 
 interface MainNavProps {
   showSearch?: boolean;
@@ -39,7 +40,7 @@ export function MainNav({ showSearch = true }: MainNavProps) {
       : [];
 
   return (
-    <header className="sticky top-0 z-50 glass border-b border-border/50">
+    <header className="sticky top-0 z-50 border-b border-border/50 bg-background/75 backdrop-blur-md">
       <div className="container mx-auto px-4 h-16 md:h-[4.5rem] flex items-center justify-between">
         <Link
           href="/"
@@ -61,6 +62,16 @@ export function MainNav({ showSearch = true }: MainNavProps) {
           )}
           {user && profile ? (
             <>
+              <div className="hidden lg:flex items-center gap-3 px-2">
+                <ProfileAvatar
+                  src={profile.photoURL}
+                  alt={profile.displayName ?? "Usuario"}
+                  size="sm"
+                />
+                <span className="text-sm text-foreground/90 max-w-[160px] truncate">
+                  {profile.displayName ?? "Usuario"}
+                </span>
+              </div>
               {navLinks.slice(1).map((link) => (
                 <Link key={link.href} href={link.href}>
                   <Button variant="ghost" size="sm" className="gap-2">

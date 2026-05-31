@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { MainNav } from "@/components/nav/MainNav";
 import { SearchBar } from "@/components/search/SearchBar";
 import { LawyerCard } from "@/components/search/LawyerCard";
@@ -11,12 +12,20 @@ import type { Specialty } from "@/lib/types";
 const PAGE_SIZE = 12;
 
 export default function BuscarPage() {
+  const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
   const [specialty, setSpecialty] = useState("");
   const [minRating, setMinRating] = useState(0);
   const [lawyers, setLawyers] = useState<Record<string, unknown>[]>([]);
   const [displayCount, setDisplayCount] = useState(PAGE_SIZE);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const q = searchParams.get("q");
+    if (q != null && q.trim() !== "") {
+      setSearchTerm(q);
+    }
+  }, [searchParams]);
 
   const doSearch = useCallback(() => {
     setLoading(true);

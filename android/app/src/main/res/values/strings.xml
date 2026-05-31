@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">LegalConnect</string>
+    <string name="title_activity_main">LegalConnect</string>
+    <string name="package_name">com.legalconnect.app</string>
+    <string name="custom_url_scheme">com.legalconnect.app</string>
+</resources>

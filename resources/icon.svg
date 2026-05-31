@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Fondo -->
+  <rect width="1024" height="1024" rx="200" fill="#1a1a2e"/>
+
+  <!-- Escala de justicia -->
+  <!-- Poste central -->
+  <rect x="495" y="280" width="34" height="420" rx="6" fill="#c9a84c"/>
+
+  <!-- Base -->
+  <rect x="380" y="692" width="264" height="36" rx="8" fill="#c9a84c"/>
+  <rect x="450" y="720" width="124" height="20" rx="6" fill="#a08030"/>
+
+  <!-- Barra horizontal -->
+  <rect x="310" y="288" width="404" height="22" rx="6" fill="#c9a84c"/>
+
+  <!-- Platillo izquierdo - cadena -->
+  <line x1="352" y1="310" x2="300" y2="430" stroke="#c9a84c" stroke-width="8" stroke-linecap="round"/>
+  <line x1="300" y1="430" x2="260" y2="430" stroke="#c9a84c" stroke-width="8" stroke-linecap="round"/>
+  <line x1="260" y1="430" x2="220" y2="430" stroke="#c9a84c" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- Platillo izquierdo -->
+  <ellipse cx="310" cy="440" rx="95" ry="22" fill="#c9a84c"/>
+  <path d="M215 440 Q310 490 405 440" fill="none" stroke="#c9a84c" stroke-width="8"/>
+
+  <!-- Platillo derecho - cadena -->
+  <line x1="672" y1="310" x2="724" y2="430" stroke="#c9a84c" stroke-width="8" stroke-linecap="round"/>
+  <line x1="724" y1="430" x2="764" y2="430" stroke="#c9a84c" stroke-width="8" stroke-linecap="round"/>
+  <line x1="764" y1="430" x2="804" y2="430" stroke="#c9a84c" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- Platillo derecho -->
+  <ellipse cx="714" cy="440" rx="95" ry="22" fill="#c9a84c"/>
+  <path d="M619 440 Q714 490 809 440" fill="none" stroke="#c9a84c" stroke-width="8"/>
+
+  <!-- Letras LC -->
+  <text x="512" y="230" font-family="Georgia, serif" font-size="88" font-weight="bold" fill="#c9a84c" text-anchor="middle" letter-spacing="4">LC</text>
+
+  <!-- Puntos decorativos dorados -->
+  <circle cx="512" cy="280" r="18" fill="#c9a84c"/>
+  <circle cx="310" cy="310" r="10" fill="#c9a84c"/>
+  <circle cx="714" cy="310" r="10" fill="#c9a84c"/>
+</svg>

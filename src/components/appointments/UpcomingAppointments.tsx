@@ -25,9 +25,14 @@ export function UpcomingAppointments({ uid, asClient }: UpcomingAppointmentsProp
   if (appointments.length === 0) {
     return (
       <div className="min-h-[220px] flex items-center justify-center rounded-2xl border border-border/60 bg-muted/20">
-        <p className="text-sm text-muted-foreground text-center">
-          No tienes citas próximas.
-        </p>
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center h-10 w-10 rounded-xl bg-muted/30 border border-border/60 mb-3">
+            <Calendar className="h-5 w-5 text-muted-foreground" strokeWidth={1.5} />
+          </div>
+          <p className="text-sm text-muted-foreground text-center">
+            No tienes citas próximas.
+          </p>
+        </div>
       </div>
     );
   }
