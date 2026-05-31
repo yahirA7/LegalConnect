@@ -394,7 +394,9 @@ export async function getOrCreateChat(
   } else {
     const updates: Record<string, unknown> = { clientName, lawyerName };
     if (clientPhoto) updates.clientPhoto = clientPhoto;
+    else updates.clientPhoto = null;
     if (lawyerPhoto) updates.lawyerPhoto = lawyerPhoto;
+    else updates.lawyerPhoto = null;
     await updateDoc(chatRef, updates);
   }
   return chatId;
