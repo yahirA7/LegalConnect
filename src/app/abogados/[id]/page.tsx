@@ -101,10 +101,10 @@ export default function LawyerPublicProfilePage() {
       const chatId = await getOrCreateChat(
         user.uid,
         profile.displayName,
-        profile.photoURL,
+        profile.photoURL || undefined,
         lawyer.uid,
         lawyer.displayName,
-        lawyer.photoURL ?? undefined
+        lawyer.photoURL || undefined
       );
       router.push(`/chat/${chatId}`);
     } catch (err) {

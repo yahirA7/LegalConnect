@@ -379,17 +379,23 @@ export async function getOrCreateChat(
   const chatRef = doc(db!, CHATS, chatId);
   const snap = await getDoc(chatRef);
   if (!snap.exists()) {
-    await setDoc(chatRef, {
+    const data: Record<string, unknown> = {
       clientId,
       lawyerId,
       clientName,
       lawyerName,
-      ...(clientPhoto ? { clientPhoto } : {}),
-      ...(lawyerPhoto ? { lawyerPhoto } : {}),
       lastMessage: null,
       lastMessageAt: null,
       lastSenderId: null,
-    });
+    };
+    if (clientPhoto) data.clientPhoto = clientPhoto;
+    if (lawyerPhoto) data.lawyerPhoto = lawyerPhoto;
+    await setDoc(chatRef, data);
+  } else {
+    const updates: Record<string, unknown> = { clientName, lawyerName };
+    if (clientPhoto) updates.clientPhoto = clientPhoto;
+    if (lawyerPhoto) updates.lawyerPhoto = lawyerPhoto;
+    await updateDoc(chatRef, updates);
   }
   return chatId;
 }
