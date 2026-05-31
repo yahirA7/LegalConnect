@@ -111,16 +111,6 @@ export default function LawyerPublicProfilePage() {
             <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
             Volver a buscar
           </Link>
-          <div className="mb-10 flex flex-col sm:flex-row sm:items-start gap-6 justify-between">
-            {isClient && user && (
-              <div className="sm:ml-auto sm:order-last">
-                <Button onClick={handleStartChat} className="gap-2 bg-[#0f172a] text-white hover:bg-[#0b1220]">
-                  <MessageSquare className="h-4 w-4" strokeWidth={1.5} />
-                  Enviar mensaje
-                </Button>
-              </div>
-            )}
-          </div>
           <div className="mb-10 flex flex-col sm:flex-row sm:items-center gap-6">
             <ProfileAvatar
               src={lawyer.photoURL}
@@ -128,7 +118,7 @@ export default function LawyerPublicProfilePage() {
               size="lg"
               className="border-2"
             />
-            <div>
+            <div className="flex-1">
             <h1 className="font-display text-2xl md:text-3xl font-semibold text-foreground">{lawyer.displayName}</h1>
             <p className="text-primary font-medium capitalize mt-1">{lawyer.specialty}</p>
             <div className="flex flex-wrap gap-4 mt-3 text-sm text-muted-foreground">
@@ -155,6 +145,15 @@ export default function LawyerPublicProfilePage() {
                 </span>
               )}
             </div>
+            {isClient && user && (
+              <Button
+                onClick={handleStartChat}
+                className="mt-4 w-full sm:w-auto gap-2 bg-[#0f172a] text-white hover:bg-[#0b1220]"
+              >
+                <MessageSquare className="h-4 w-4" strokeWidth={1.5} />
+                Enviar mensaje
+              </Button>
+            )}
             </div>
           </div>
 
