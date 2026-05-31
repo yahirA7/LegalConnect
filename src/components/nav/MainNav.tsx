@@ -111,15 +111,28 @@ export function MainNav({ showSearch = true }: MainNavProps) {
           )}
         </nav>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          className="md:hidden"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
-        >
-          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </Button>
+        <div className="flex items-center gap-1 md:hidden">
+          {user && profile && (
+            <Link href="/chat">
+              <Button variant="ghost" size="icon" className="relative">
+                <MessageSquare className="h-5 w-5" strokeWidth={1.5} />
+                {unreadChats > 0 && (
+                  <span className="absolute top-1 right-1 h-4 w-4 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">
+                    {unreadChats > 9 ? "9+" : unreadChats}
+                  </span>
+                )}
+              </Button>
+            </Link>
+          )}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
+          >
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
+        </div>
       </div>
 
       <div
