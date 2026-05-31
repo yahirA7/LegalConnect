@@ -61,8 +61,24 @@ export async function signUp(
 }
 
 export async function signIn(email: string, password: string) {
-  if (!auth) throw new Error("Firebase no configurado. Añade las credenciales en .env.local");
-  return signInWithEmailAndPassword(auth, email, password);
+  if (!auth || !db) throw new Error("Firebase no configurado. Añade las credenciales en .env.local");
+  const credential = await signInWithEmailAndPassword(auth, email, password);
+  const user = credential.user;
+  const ref = doc(db, USERS_COLLECTION, user.uid);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) {
+    const role = await getCurrentUserRole(user) ?? "cliente";
+    await setDoc(ref, {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName ?? email.split("@")[0],
+      role,
+      photoURL: user.photoURL ?? null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+  }
+  return credential;
 }
 
 export async function resetPassword(email: string) {
